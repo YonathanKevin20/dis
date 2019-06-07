@@ -23,8 +23,8 @@ class CreateDeliveryOrdersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('spvs_id')->references('id')->on('spvs');
-            $table->foreign('sales_id')->references('id')->on('sales');
+            $table->foreign('spvs_id')->references('id')->on('users');
+            $table->foreign('sales_id')->references('id')->on('users');
         });
     }
 

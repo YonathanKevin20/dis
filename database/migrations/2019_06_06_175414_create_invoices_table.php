@@ -22,7 +22,7 @@ class CreateInvoicesTable extends Migration
             $table->softDeletes();
 
             $table->foreign('stores_id')->references('id')->on('stores');
-            $table->foreign('sales_id')->references('id')->on('sales');
+            $table->foreign('sales_id')->references('id')->on('users');
             $table->foreign('delivery_orders_id')->references('id')->on('delivery_orders');
         });
     }
