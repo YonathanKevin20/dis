@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
 use App\Models\DeliveryOrderProduct;
 use Auth;
+use DataTables;
 
 class DeliveryOrderController extends Controller
 {
@@ -17,6 +18,13 @@ class DeliveryOrderController extends Controller
     public function create()
     {
         return view('pages.delivery-order.create');
+    }
+
+    public function getDatatables(Request $req)
+    {
+        $model = DeliveryOrder::with(['spv', 'sales']);
+
+        return DataTables::eloquent($model)->toJson();
     }
 
     public function store(Request $req)

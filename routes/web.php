@@ -37,6 +37,10 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('get-sales', 'UserController@getSales');
 	});
 
+	Route::group(['prefix' => 'delivery-order'], function() {
+		Route::get('get-datatables', 'DeliveryOrderController@getDatatables');
+	});
+
 	Route::resource('delivery-order', 'DeliveryOrderController');
 	Route::apiResource('invoice', 'InvoiceController');
 });
