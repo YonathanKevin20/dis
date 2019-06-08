@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -35,5 +36,15 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function redirectTo()
+    {
+        if(Auth::user()->role == 1) {
+            return route('delivery-order.index');
+        }
+        elseif(Auth::user()->role == 2) {
+            return route('invoice.index');
+        }
     }
 }

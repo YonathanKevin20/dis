@@ -18,3 +18,26 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => 'auth'], function () {
+	// Route::group(['prefix' => 'book'], function() {
+	// 	Route::get('get-data', 'BookController@getData');
+	// 	Route::get('get-chart', 'BookController@getChart');
+	// 	Route::post('import', 'BookController@import');
+	// 	Route::get('download-template-xlsx', 'BookController@downloadTemplateXlsx');
+	// 	Route::get('download-template-csv', 'BookController@downloadTemplateCsv');
+	// });
+
+	// Route::group(['prefix' => 'category'], function() {
+	// 	Route::get('get-datatables', 'CategoryController@getDatatables');
+	// 	Route::get('get-chart', 'CategoryController@getChart');
+	// });
+
+	Route::group(['prefix' => 'user'], function() {
+		Route::get('get-spv', 'UserController@getSpv');
+		Route::get('get-sales', 'UserController@getSales');
+	});
+
+	Route::apiResource('delivery-order', 'DeliveryOrderController');
+	Route::apiResource('invoice', 'InvoiceController');
+});
