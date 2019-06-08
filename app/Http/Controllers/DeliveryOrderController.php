@@ -14,6 +14,11 @@ class DeliveryOrderController extends Controller
         return view('pages.delivery-order.index');
     }
 
+    public function create()
+    {
+        return view('pages.delivery-order.create');
+    }
+
     public function store(Request $req)
     {
         $delivery_order = DeliveryOrder::create([

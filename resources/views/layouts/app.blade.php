@@ -37,7 +37,10 @@
                         @auth
                             @if(Auth::user()->role == 1)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('Delivery Order') }}</a>
+                                    <a class="nav-link" href="{{ route('delivery-order.create') }}">{{ __('Create Delivery Order') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('View Delivery Order') }}</a>
                                 </li>
                             @elseif(Auth::user()->role == 2)
                                 <li class="nav-item">

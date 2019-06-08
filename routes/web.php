@@ -37,6 +37,6 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('get-sales', 'UserController@getSales');
 	});
 
-	Route::apiResource('delivery-order', 'DeliveryOrderController');
+	Route::resource('delivery-order', 'DeliveryOrderController');
 	Route::apiResource('invoice', 'InvoiceController');
 });
