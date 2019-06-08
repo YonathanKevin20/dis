@@ -33,7 +33,7 @@
                     :options="listSales"
                     placeholder="Select Sales"
                     label="name"
-                    track-by="id">
+                    track-by="id" required>
                   </multiselect>
                   <div class="invalid-feedback">Required</div>
                 </div>
@@ -53,6 +53,47 @@
                   <input type="text" class="form-control" v-model="driver" required>
                   <div class="invalid-feedback">Required</div>
                 </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-hover">
+                  <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th width="30%">Code</th>
+                    <th width="40%">Product Name</th>
+                    <th>QTY</th>
+                    <th><button type="button" class="btn btn-primary btn-sm" @click="addRow()">Add</button></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(row, index) in products">
+                    <td>@{{ index+1 }}</td>
+                    <td>
+                      <multiselect
+                        :id="'select'+index"
+                        v-model="row.product"
+                        :options="listProducts"
+                        placeholder="Select Product"
+                        label="code"
+                        track-by="id" required>
+                      </multiselect>
+                      <div class="invalid-feedback">Required</div>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" v-model="row.product.name" readonly>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" v-model="row.qty" required>
+                      <div class="invalid-feedback">Required</div>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" @click="removeRow(index)">X</button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
@@ -126,17 +167,41 @@ var app = new Vue({
   el: '#app',
   data: {
     no_delivery_order: '',
-    listSales: [],
     sales: '',
     no_polisi: '',
     driver: '',
+    products: [
+      {
+        product: '',
+        qty: ''
+      }
+    ],
+    listSales: [],
+    listProducts: [],
   },
   created() {
     this.getSales();
+    this.getProduct();
   },
   methods: {
     async create() {
-      alert('create');
+      try {
+        const response = await axios.post('delivery-order', {
+          no_delivery_order: this.no_delivery_order,
+          sales_id: this.sales.id,
+          no_polisi: this.no_polisi,
+          driver: this.driver,
+          products: this.products,
+        });
+        this.initForm();
+        Toast.fire({
+          type: 'success',
+          title: 'Created'
+        });
+        console.log(response);
+      } catch(error) {
+        console.error(error);
+      }
     },
     async getSales() {
       try {
@@ -146,6 +211,26 @@ var app = new Vue({
       } catch (error) {
         console.error(error);
       }
+    },
+    async getProduct() {
+      try {
+        const response = await axios.get('product/get-data');
+        this.listProducts = response.data;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    initForm() {
+      this.no_delivery_order = '';
+      this.sales = '',
+      this.no_polisi = '';
+      this.driver = '';
+      this.amount = '';
+      this.products = [{
+        product: '',
+        qty: '',
+      }];
     },
     async update(id) {
       try {
@@ -178,6 +263,12 @@ var app = new Vue({
       } catch (error) {
         console.error(error);
       }
+    },
+    addRow() {
+      this.products.push({product: '', qty: ''});
+    },
+    removeRow(index) {
+      this.products.splice(index, 1);
     },
   }
 })

@@ -28,10 +28,9 @@ Route::group(['middleware' => 'auth'], function () {
 	// 	Route::get('download-template-csv', 'BookController@downloadTemplateCsv');
 	// });
 
-	// Route::group(['prefix' => 'category'], function() {
-	// 	Route::get('get-datatables', 'CategoryController@getDatatables');
-	// 	Route::get('get-chart', 'CategoryController@getChart');
-	// });
+	Route::group(['prefix' => 'product'], function() {
+		Route::get('get-data', 'ProductController@getData');
+	});
 
 	Route::group(['prefix' => 'user'], function() {
 		Route::get('get-spv', 'UserController@getSpv');

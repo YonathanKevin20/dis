@@ -18,8 +18,6 @@ class CreateProductsTable extends Migration
             $table->string('code')->unique();
             $table->string('name');
             $table->unsignedInteger('price');
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -37,11 +37,11 @@
                         @auth
                             @if(Auth::user()->role == 1)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('home') }}">{{ __('Delivery Order') }}</a>
+                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('Delivery Order') }}</a>
                                 </li>
                             @elseif(Auth::user()->role == 2)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('home') }}">{{ __('Invoice') }}</a>
+                                    <a class="nav-link" href="{{ route('invoice.index') }}">{{ __('Invoice') }}</a>
                                 </li>
                             @endif
                         @endauth
