@@ -8,13 +8,25 @@
                 <div class="card-header">{{ __('Reset Password') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                    @if(session('status'))
+                        <div class="alert alert-info" role="alert">
+                            <div class="row">
+                                <label class="col-md-3 col-form-label">{{ session('status') }}</label>
+                                @if(session('newpass'))
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <input id="newPass" type="text" class="form-control" value="{{ session('newpass') }}" readonly>
+                                            <div class="input-group-append">
+                                                <button id="btnTooltip" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Copy" onclick="copyPassword()"><i class="fa fa-copy"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('password.email') }}">
+                    <form method="POST" action="/reset-password">
                         @csrf
 
                         <div class="form-group row">
@@ -34,7 +46,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
+                                    {{ __('Reset Password') }}
                                 </button>
                             </div>
                         </div>
@@ -45,3 +57,21 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+function copyPassword() {
+    var copyText = document.getElementById("newPass");
+    copyText.select();
+    document.execCommand('copy');
+
+    $('#btnTooltip')
+        .tooltip('hide')
+        .attr('data-original-title', 'Copied')
+        .tooltip('show');
+}
+$(function () {
+  $('#btnTooltip').tooltip()
+})
+</script>
+@endpush
