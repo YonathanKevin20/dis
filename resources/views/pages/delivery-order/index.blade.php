@@ -5,7 +5,7 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">View Delivery Order</div>
+        <div class="card-header">List Delivery Order</div>
 
         <div class="card-body">
           <div class="form-group row">
@@ -41,9 +41,9 @@ $(document).ready(function() {
     processing: true,
     serverSide: true,
     ajax: '/delivery-order/get-datatables',
-    order: [[ 1, 'asc' ]],
+    order: [[ 2, 'asc' ]],
     columns: [
-      { data: 'id', name: 'id', searchable: false },
+      { data: 'id', name: 'id', searchable: false, orderable: false },
       { data: 'no_delivery_order', name: 'no_delivery_order' },
       { data: 'created_at',
         name: 'created_at',
@@ -57,7 +57,7 @@ $(document).ready(function() {
       { data: 'driver', name: 'driver' },
       /* ACTION */ {
         render: function (data, type, row) {
-          return "<button id='modal-edit' class='btn btn-sm btn-primary' data-id='"+row.id+"' data-name='"+row.name+"'>Edit</button>&nbsp;<button onclick='checkDelete("+row.id+")' class='btn btn-sm btn-danger'>Delete</button>";
+          return "<a href='/delivery-order/view/"+row.id+"' class='btn btn-sm btn-primary'>Show</a>";
         }, orderable: false, searchable: false
       },
     ]

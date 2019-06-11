@@ -17,4 +17,9 @@ class DeliveryOrder extends Model
     {
         return $this->belongsTo('App\User', 'sales_id', 'id');
     }
+
+    public function vehicle()
+    {
+        return $this->belongsTo('App\Models\Vehicle');
+    }
 }

@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'delivery-order'], function() {
 		Route::get('get-datatables', 'DeliveryOrderController@getDatatables');
+		Route::get('view/{delivery_order}', 'DeliveryOrderController@view');
 	});
 
 	Route::resource('delivery-order', 'DeliveryOrderController');

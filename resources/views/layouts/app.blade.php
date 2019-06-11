@@ -40,7 +40,7 @@
                                     <a class="nav-link" href="{{ route('delivery-order.create') }}">{{ __('Create Delivery Order') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('View Delivery Order') }}</a>
+                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }}</a>
                                 </li>
                             @elseif(Auth::user()->role == 2)
                                 <li class="nav-item">
@@ -127,6 +127,13 @@
         Vue.filter('formatDate', function(value) {
             if(value) {
                 return moment(String(value)).format('DD MMMM YYYY, HH:mm:ss')
+            }
+        });
+        Vue.mixin({
+            methods: {
+                humanDate(value) {
+                    return moment(String(value)).format('DD MMM YYYY')
+                }
             }
         });
     </script>

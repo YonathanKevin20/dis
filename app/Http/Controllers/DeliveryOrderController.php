@@ -20,6 +20,11 @@ class DeliveryOrderController extends Controller
         return view('pages.delivery-order.create');
     }
 
+    public function view($id)
+    {
+        return view('pages.delivery-order.view', compact('id'));
+    }
+
     public function getDatatables(Request $req)
     {
         $model = DeliveryOrder::with(['spv', 'sales']);
@@ -51,7 +56,15 @@ class DeliveryOrderController extends Controller
 
     public function show($id)
     {
-        //
+        $data = DeliveryOrder::with(['spv', 'sales'])->findOrFail($id);
+        $product = DeliveryOrderProduct::with(['product'])->where('delivery_orders_id', $id)->get();
+
+        $result = [
+            'data' => $data,
+            'product' => $product,
+        ];
+
+        return response()->json($result);
     }
 
     public function update(Request $req, $id)
