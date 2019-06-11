@@ -37,13 +37,13 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>No. Polisi</label>
-                <input type="text" class="form-control" v-model="no_polisi" readonly>
+                <input type="text" class="form-control" v-model="vehicle.no_polisi" readonly>
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
                 <label>Driver</label>
-                <input type="text" class="form-control" v-model="driver" readonly>
+                <input type="text" class="form-control" v-model="vehicle.driver" readonly>
               </div>
             </div>
           </div>
@@ -92,8 +92,7 @@ var app = new Vue({
     no_delivery_order: '',
     tgl_dokumen: '',
     sales: '',
-    no_polisi: '',
-    driver: '',
+    vehicle: '',
     products: [
       {
         product: '',
@@ -113,8 +112,7 @@ var app = new Vue({
         this.no_delivery_order = data.no_delivery_order;
         this.tgl_dokumen = this.humanDate(data.created_at);
         this.sales = data.sales;
-        this.no_polisi = data.no_polisi;
-        this.driver = data.driver;
+        this.vehicle = data.vehicle;
         for(let i = 0; i < product.length; i++) {
           this.products[i] = {
             product: product[i].product,

@@ -33,6 +33,10 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('/get-data', 'ProductController@getData');
 	});
 
+	Route::group(['prefix' => 'vehicle'], function() {
+		Route::get('/get-data', 'VehicleController@getData');
+	});
+
 	Route::group(['prefix' => 'user'], function() {
 		Route::get('/get-spv', 'UserController@getSpv');
 		Route::get('/get-sales', 'UserController@getSales');

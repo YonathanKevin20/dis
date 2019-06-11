@@ -40,18 +40,23 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label>No. Polisi</label>
-                  <input type="text" class="form-control" v-model="no_polisi" required>
+                  <multiselect
+                    v-model="vehicle"
+                    :options="listVehicles"
+                    placeholder="Select Vehicle"
+                    label="no_polisi"
+                    track-by="id" required>
+                  </multiselect>
                   <div class="invalid-feedback">Required</div>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Driver</label>
-                  <input type="text" class="form-control" v-model="driver" required>
-                  <div class="invalid-feedback">Required</div>
+                  <input type="text" class="form-control" v-model="vehicle.driver" readonly>
                 </div>
               </div>
             </div>
@@ -113,8 +118,7 @@ var app = new Vue({
   data: {
     no_delivery_order: '',
     sales: '',
-    no_polisi: '',
-    driver: '',
+    vehicle: '',
     products: [
       {
         product: '',
@@ -122,10 +126,12 @@ var app = new Vue({
       }
     ],
     listSales: [],
+    listVehicles: [],
     listProducts: [],
   },
   created() {
     this.getSales();
+    this.getVehicle();
     this.getProduct();
   },
   methods: {
@@ -134,8 +140,7 @@ var app = new Vue({
         const response = await axios.post('/delivery-order', {
           no_delivery_order: this.no_delivery_order,
           sales_id: this.sales.id,
-          no_polisi: this.no_polisi,
-          driver: this.driver,
+          vehicle_id: this.vehicle.id,
           products: this.products,
         });
         this.initForm();
@@ -157,6 +162,15 @@ var app = new Vue({
         console.error(error);
       }
     },
+    async getVehicle() {
+      try {
+        const response = await axios.get('/vehicle/get-data');
+        this.listVehicles = response.data;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async getProduct() {
       try {
         const response = await axios.get('/product/get-data');
@@ -169,8 +183,7 @@ var app = new Vue({
     initForm() {
       this.no_delivery_order = '';
       this.sales = '',
-      this.no_polisi = '';
-      this.driver = '';
+      this.vehicle = '',
       this.amount = '';
       this.products = [{
         product: '',

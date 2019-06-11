@@ -18,13 +18,13 @@ class CreateDeliveryOrdersTable extends Migration
             $table->string('no_delivery_order')->unique();
             $table->unsignedInteger('spvs_id');
             $table->unsignedInteger('sales_id');
-            $table->string('no_polisi');
-            $table->string('driver');
+            $table->unsignedInteger('vehicles_id');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('spvs_id')->references('id')->on('users');
             $table->foreign('sales_id')->references('id')->on('users');
+            $table->foreign('vehicles_id')->references('id')->on('vehicles');
         });
     }
 

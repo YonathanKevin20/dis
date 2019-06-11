@@ -27,7 +27,7 @@ class DeliveryOrderController extends Controller
 
     public function getDatatables(Request $req)
     {
-        $model = DeliveryOrder::with(['spv', 'sales']);
+        $model = DeliveryOrder::with(['spv', 'sales', 'vehicle']);
 
         return DataTables::eloquent($model)->toJson();
     }
@@ -38,8 +38,7 @@ class DeliveryOrderController extends Controller
             'no_delivery_order' => $req->no_delivery_order,
             'spvs_id' => Auth::user()->id,
             'sales_id' => $req->sales_id,
-            'no_polisi' => $req->no_polisi,
-            'driver' => $req->driver,
+            'vehicles_id' => $req->vehicle_id,
         ]);
 
         $products = $req->products;
@@ -56,7 +55,7 @@ class DeliveryOrderController extends Controller
 
     public function show($id)
     {
-        $data = DeliveryOrder::with(['spv', 'sales'])->findOrFail($id);
+        $data = DeliveryOrder::with(['spv', 'sales', 'vehicle'])->findOrFail($id);
         $product = DeliveryOrderProduct::with(['product'])->where('delivery_orders_id', $id)->get();
 
         $result = [

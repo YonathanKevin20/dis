@@ -53,8 +53,8 @@ $(document).ready(function() {
       },
       { data: 'spv.name', name: 'spv.name' },
       { data: 'sales.name', name: 'sales.name' },
-      { data: 'no_polisi', name: 'no_polisi' },
-      { data: 'driver', name: 'driver' },
+      { data: 'vehicle.no_polisi', name: 'vehicle.no_polisi' },
+      { data: 'vehicle.driver', name: 'vehicle.driver' },
       /* ACTION */ {
         render: function (data, type, row) {
           return "<a href='/delivery-order/view/"+row.id+"' class='btn btn-sm btn-primary'>Show</a>";
@@ -72,78 +72,10 @@ $(document).ready(function() {
 var app = new Vue({
   el: '#app',
   data: {
-    no_delivery_order: '',
-    sales: '',
-    no_polisi: '',
-    driver: '',
-    products: [
-      {
-        product: '',
-        qty: ''
-      }
-    ],
-    listSales: [],
-    listProducts: [],
   },
   created() {
-    this.getSales();
-    this.getProduct();
   },
   methods: {
-    async create() {
-      try {
-        const response = await axios.post('delivery-order', {
-          no_delivery_order: this.no_delivery_order,
-          sales_id: this.sales.id,
-          no_polisi: this.no_polisi,
-          driver: this.driver,
-          products: this.products,
-        });
-        this.initForm();
-        Toast.fire({
-          type: 'success',
-          title: 'Created'
-        });
-        console.log(response);
-      } catch(error) {
-        console.error(error);
-      }
-    },
-    async getSales() {
-      try {
-        const response = await axios.get('user/get-sales');
-        this.listSales = response.data;
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async getProduct() {
-      try {
-        const response = await axios.get('product/get-data');
-        this.listProducts = response.data;
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    initForm() {
-      this.no_delivery_order = '';
-      this.sales = '',
-      this.no_polisi = '';
-      this.driver = '';
-      this.amount = '';
-      this.products = [{
-        product: '',
-        qty: '',
-      }];
-    },
-    addRow() {
-      this.products.push({product: '', qty: ''});
-    },
-    removeRow(index) {
-      this.products.splice(index, 1);
-    },
   }
 })
 </script>
