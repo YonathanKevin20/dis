@@ -29,7 +29,26 @@ class DeliveryOrderController extends Controller
     {
         $model = DeliveryOrder::with(['spv', 'sales', 'vehicle']);
 
+        $params = $req->params;
+        if($params && Auth::user()->role == 2) {
+            $model->where('sales_id', $params['id']);
+        }
+
         return DataTables::eloquent($model)->toJson();
+    }
+
+    public function getData(Request $req)
+    {
+        $model = DeliveryOrder::with(['spv', 'sales', 'vehicle'])->where('sales_id', Auth::user()->id)->get();
+
+        return response()->json($model);
+    }
+
+    public function getDataProduct($delivery_orders_id)
+    {
+        $model = DeliveryOrderProduct::with(['product'])->where('delivery_orders_id', $delivery_orders_id)->get();
+
+        return response()->json($model);
     }
 
     public function store(Request $req)

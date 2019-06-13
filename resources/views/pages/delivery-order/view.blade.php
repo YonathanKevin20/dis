@@ -21,7 +21,13 @@
                 <input type="text" class="form-control" v-model="tgl_dokumen" readonly>
               </div>
             </div>
-            <div class="col-md-3 offset-md-3 text-right">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Supervisor</label>
+                <input type="text" class="form-control" v-model="spv.name" readonly>
+              </div>
+            </div>
+            <div class="col-md-3 text-right">
               <a href="javascript:history.go(-1)" class="btn btn-info">Back</a>
             </div>
           </div>
@@ -91,6 +97,7 @@ var app = new Vue({
     id: {{ $id }},
     no_delivery_order: '',
     tgl_dokumen: '',
+    spv: '',
     sales: '',
     vehicle: '',
     products: [
@@ -111,14 +118,10 @@ var app = new Vue({
         let product = response.data.product;
         this.no_delivery_order = data.no_delivery_order;
         this.tgl_dokumen = this.humanDate(data.created_at);
+        this.spv = data.spv;
         this.sales = data.sales;
         this.vehicle = data.vehicle;
-        for(let i = 0; i < product.length; i++) {
-          this.products[i] = {
-            product: product[i].product,
-            qty: product[i].qty,
-          };
-        }
+        this.products = product;
         console.log(response);
       } catch (error) {
         console.error(error);

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 Auth::routes();
@@ -21,14 +21,6 @@ Route::post('/reset-password', 'Auth\ResetPasswordController@resetPassword');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
-	// Route::group(['prefix' => 'book'], function() {
-	// 	Route::get('get-data', 'BookController@getData');
-	// 	Route::get('get-chart', 'BookController@getChart');
-	// 	Route::post('import', 'BookController@import');
-	// 	Route::get('download-template-xlsx', 'BookController@downloadTemplateXlsx');
-	// 	Route::get('download-template-csv', 'BookController@downloadTemplateCsv');
-	// });
-
 	Route::group(['prefix' => 'product'], function() {
 		Route::get('/get-data', 'ProductController@getData');
 	});
@@ -43,10 +35,12 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	Route::group(['prefix' => 'delivery-order'], function() {
+		Route::get('/get-data', 'DeliveryOrderController@getData');
+		Route::get('/get-data-product/{delivery_order}', 'DeliveryOrderController@getDataProduct');
 		Route::get('/get-datatables', 'DeliveryOrderController@getDatatables');
 		Route::get('/view/{delivery_order}', 'DeliveryOrderController@view');
 	});
 
 	Route::resource('delivery-order', 'DeliveryOrderController');
-	Route::apiResource('invoice', 'InvoiceController');
+	Route::resource('invoice', 'InvoiceController');
 });

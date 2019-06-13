@@ -40,7 +40,14 @@ $(document).ready(function() {
   var tables = $('#delivery-orders-table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: '/delivery-order/get-datatables',
+    ajax: {
+      url: '/delivery-order/get-datatables',
+      data: function(d) {
+        d.params = {
+          id: {{ Auth::user()->id }},
+        }
+      }
+    },
     order: [[ 2, 'asc' ]],
     columns: [
       { data: 'id', name: 'id', searchable: false, orderable: false },

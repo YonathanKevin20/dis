@@ -40,14 +40,17 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('delivery-order.create') }}">{{ __('Create Delivery Order') }}</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }}</a>
-                                </li>
                             @elseif(Auth::user()->role == 2)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('invoice.index') }}">{{ __('Invoice') }}</a>
+                                    <a class="nav-link" href="{{ route('invoice.create') }}">{{ __('Create Invoice') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('invoice.index') }}">{{ __('List Invoice') }}</a>
                                 </li>
                             @endif
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }}</a>
+                            </li>
                         @endauth
                     </ul>
 
@@ -70,6 +73,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">
+                                        {{ __('Change Password') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -136,6 +142,10 @@
             methods: {
                 humanDate(value) {
                     return moment(String(value)).format('DD MMM YYYY')
+                },
+                formatPrice(value) {
+                    let val = (value/1).toFixed(0).replace('.', ',')
+                    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
                 }
             }
         });

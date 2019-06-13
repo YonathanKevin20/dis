@@ -19,7 +19,7 @@ class CreateInvoiceProductsTable extends Migration
             $table->unsignedInteger('products_id');
             $table->unsignedInteger('qty');
             $table->unsignedInteger('price');
-            $table->unsignedInteger('jumlah');
+            $table->unsignedInteger('total');
             $table->timestamps();
             $table->softDeletes();
 
