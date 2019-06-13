@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -72,5 +73,15 @@ class RegisterController extends Controller
         ]);
 
         return $user;
+    }
+
+    public function redirectTo()
+    {
+        if(Auth::user()->role == 1) {
+            return route('delivery-order.index');
+        }
+        elseif(Auth::user()->role == 2) {
+            return route('invoice.index');
+        }
     }
 }
