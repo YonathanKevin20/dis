@@ -12,14 +12,14 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>No. Dokumen</label>
+                  <label class="font-weight-bold">No. Dokumen</label>
                   <input type="text" class="form-control" v-model="no_delivery_order" required>
                   <div class="invalid-feedback">Required</div>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Tgl. Dokumen</label>
+                  <label class="font-weight-bold">Tgl. Dokumen</label>
                   <input type="text" class="form-control" value="{{ date('d M Y') }}" readonly>
                 </div>
               </div>
@@ -27,7 +27,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Sales</label>
+                  <label class="font-weight-bold">Sales</label>
                   <multiselect
                     v-model="sales"
                     :options="listSales"
@@ -42,7 +42,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>No. Polisi</label>
+                  <label class="font-weight-bold">No. Polisi</label>
                   <multiselect
                     v-model="vehicle"
                     :options="listVehicles"
@@ -55,7 +55,7 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Driver</label>
+                  <label class="font-weight-bold">Driver</label>
                   <input type="text" class="form-control" v-model="vehicle.driver" readonly>
                 </div>
               </div>

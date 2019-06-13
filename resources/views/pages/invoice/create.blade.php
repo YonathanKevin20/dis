@@ -12,7 +12,7 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>No. Dokumen</label>
+                  <label class="font-weight-bold">No. Dokumen</label>
                   <multiselect
                     v-model="delivery_order"
                     :options="listDeliveryOrders"
@@ -26,13 +26,13 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Tgl. Dokumen</label>
+                  <label class="font-weight-bold">Tgl. Dokumen</label>
                   <input type="text" class="form-control" v-model="tgL_dokumen" readonly>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Customer</label>
+                  <label class="font-weight-bold">Customer</label>
                   <multiselect
                     v-model="store"
                     :options="listStores"
@@ -48,7 +48,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Sales</label>
+                  <label class="font-weight-bold">Sales</label>
                   <input type="text" class="form-control" v-model="sales.name" readonly>
                 </div>
               </div>
@@ -56,13 +56,13 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>No. Polisi</label>
+                  <label class="font-weight-bold">No. Polisi</label>
                   <input type="text" class="form-control" v-model="vehicle.no_polisi" readonly>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Driver</label>
+                  <label class="font-weight-bold">Driver</label>
                   <input type="text" class="form-control" v-model="vehicle.driver" readonly>
                 </div>
               </div>

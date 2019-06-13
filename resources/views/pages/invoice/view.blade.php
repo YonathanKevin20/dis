@@ -11,19 +11,19 @@
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
-                <label>No. Dokumen</label>
+                <label class="font-weight-bold">No. Dokumen</label>
                 <input type="text" class="form-control" v-model="delivery_order.no_delivery_order" readonly>
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label>Tgl. Dokumen</label>
+                <label class="font-weight-bold">Tgl. Dokumen</label>
                 <input type="text" class="form-control" v-model="tgl_dokumen" readonly>
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label>Customer</label><br>
+                <label class="font-weight-bold">Customer</label><br>
                 <span>@{{ store.name }} - [@{{ store.location }}]</span>
               </div>
             </div>
@@ -34,7 +34,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>Sales</label>
+                <label class="font-weight-bold">Sales</label>
                 <input type="text" class="form-control" v-model="sales.name" readonly>
               </div>
             </div>
@@ -43,14 +43,14 @@
             <div class="col-md-12">
               <table class="table table-hover">
                 <thead>
-                <tr>
-                  <th>No.</th>
-                  <th width="25%">Code</th>
-                  <th width="35%">Product Name</th>
-                  <th width="15%">QTY</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                </tr>
+                  <tr>
+                    <th>No.</th>
+                    <th width="25%">Code</th>
+                    <th width="35%">Product Name</th>
+                    <th width="15%">QTY</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                  </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(row, index) in products">

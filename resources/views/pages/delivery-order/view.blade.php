@@ -11,19 +11,19 @@
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
-                <label>No. Dokumen</label>
+                <label class="font-weight-bold">No. Dokumen</label>
                 <input type="text" class="form-control" v-model="no_delivery_order" readonly>
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label>Tgl. Dokumen</label>
+                <label class="font-weight-bold">Tgl. Dokumen</label>
                 <input type="text" class="form-control" v-model="tgl_dokumen" readonly>
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label>Supervisor</label>
+                <label class="font-weight-bold">Supervisor</label>
                 <input type="text" class="form-control" v-model="spv.name" readonly>
               </div>
             </div>
@@ -34,7 +34,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>Sales</label>
+                <label class="font-weight-bold">Sales</label>
                 <input type="text" class="form-control" v-model="sales.name" readonly>
               </div>
             </div>
@@ -42,13 +42,13 @@
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
-                <label>No. Polisi</label>
+                <label class="font-weight-bold">No. Polisi</label>
                 <input type="text" class="form-control" v-model="vehicle.no_polisi" readonly>
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label>Driver</label>
+                <label class="font-weight-bold">Driver</label>
                 <input type="text" class="form-control" v-model="vehicle.driver" readonly>
               </div>
             </div>
