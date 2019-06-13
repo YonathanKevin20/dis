@@ -55,7 +55,7 @@ $(document).ready(function() {
       { data: 'sales.name', name: 'sales.name' },
       /* ACTION */ {
         render: function (data, type, row) {
-          return "<a href='/delivery-order/view/"+row.id+"' class='btn btn-sm btn-primary'>Show</a>";
+          return "<a href='/invoice/view/"+row.id+"' class='btn btn-sm btn-primary'>Show</a>";
         }, orderable: false, searchable: false
       },
     ]

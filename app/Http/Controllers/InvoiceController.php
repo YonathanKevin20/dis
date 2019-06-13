@@ -19,6 +19,11 @@ class InvoiceController extends Controller
         return view('pages.invoice.create');
     }
 
+    public function view($id)
+    {
+        return view('pages.invoice.view', compact('id'));
+    }
+
     public function getDatatables(Request $req)
     {
         $model = Invoice::with(['store', 'sales', 'deliveryOrder']);
@@ -55,7 +60,15 @@ class InvoiceController extends Controller
 
     public function show($id)
     {
-        //
+        $data = Invoice::with(['store', 'sales', 'deliveryOrder'])->findOrFail($id);
+        $product = InvoiceProduct::with(['product'])->where('invoices_id', $id)->get();
+
+        $result = [
+            'data' => $data,
+            'product' => $product,
+        ];
+
+        return response()->json($result);
     }
 
     public function update(Request $req, $id)
