@@ -80,6 +80,7 @@
                         :id="'select'+index"
                         v-model="row.product"
                         :options="listProducts"
+                        :custom-label="customLabelProduct"
                         placeholder="Select Product"
                         label="code"
                         track-by="id" required>
@@ -193,6 +194,9 @@ var app = new Vue({
         product: '',
         qty: '',
       }];
+    },
+    customLabelProduct({code, name}) {
+      return `${code} - [${name}]`;
     },
     addRow() {
       this.products.push({product: '', qty: ''});

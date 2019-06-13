@@ -36,7 +36,7 @@
                   <multiselect
                     v-model="store"
                     :options="listStores"
-                    :custom-label="customLabel"
+                    :custom-label="customLabelStore"
                     placeholder="Select Customer"
                     label="name"
                     track-by="id">
@@ -221,7 +221,7 @@ var app = new Vue({
         qty: '',
       }];
     },
-    customLabel({name, location}) {
+    customLabelStore({name, location}) {
       return `${name} - [${location}]`;
     }
   },
