@@ -135,18 +135,20 @@
     <script type="text/javascript">
         Vue.filter('formatDate', function(value) {
             if(value) {
-                return moment(String(value)).format('DD MMMM YYYY, HH:mm:ss')
+                return moment(String(value)).format('DD MMMM YYYY, HH:mm:ss');
+            }
+        });
+        Vue.filter('formatPrice', function(value) {
+            if(value) {
+                let val = (value/1).toFixed(0).replace('.', ',')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
         });
         Vue.mixin({
             methods: {
                 humanDate(value) {
-                    return moment(String(value)).format('DD MMM YYYY')
+                    return moment(String(value)).format('DD MMM YYYY');
                 },
-                formatPrice(value) {
-                    let val = (value/1).toFixed(0).replace('.', ',')
-                    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                }
             }
         });
     </script>

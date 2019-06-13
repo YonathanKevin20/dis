@@ -5,7 +5,7 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">Create Delivery Order</div>
+        <div class="card-header">Create Invoice</div>
 
         <form class="was-validated" @submit.prevent="create()">
           <div class="card-body">
@@ -15,7 +15,7 @@
                   <label>No. Dokumen</label>
                   <multiselect
                     v-model="delivery_order"
-                    :options="listDeliveryOrder"
+                    :options="listDeliveryOrders"
                     placeholder="Select No. Dokumen"
                     label="no_delivery_order"
                     track-by="id"
@@ -28,6 +28,20 @@
                 <div class="form-group">
                   <label>Tgl. Dokumen</label>
                   <input type="text" class="form-control" v-model="tgL_dokumen" readonly>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Customer</label>
+                  <multiselect
+                    v-model="store"
+                    :options="listStores"
+                    :custom-label="customLabel"
+                    placeholder="Select Customer"
+                    label="name"
+                    track-by="id">
+                  </multiselect>
+                  <div class="invalid-feedback">Required</div>
                 </div>
               </div>
             </div>
@@ -61,7 +75,7 @@
                     <th>No.</th>
                     <th width="25%">Code</th>
                     <th width="35%">Product Name</th>
-                    <th>QTY</th>
+                    <th width="15%">QTY</th>
                     <th>Price</th>
                     <th>Total</th>
                   </tr>
@@ -80,17 +94,27 @@
                         <div class="invalid-feedback">Required</div>
                       </td>
                       <td>
-                        <input type="text" class="form-control" v-model="row.product.price" readonly>
+                        <span>@{{ row.product.price | formatPrice }}</span>
                       </td>
                       <td>
-                        <input type="text" class="form-control" v-model="row.total" readonly>
+                        <span>@{{ row.total | formatPrice }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="5" class="text-right font-weight-bold">Grand Total</td>
+                      <td>
+                        <span>@{{ grandTotal | formatPrice }}</span>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </div>
           </div>
         </form>
 
@@ -107,6 +131,7 @@ var app = new Vue({
   data: {
     delivery_order: '',
     tgL_dokumen: '',
+    store: '',
     sales: '',
     vehicle: '',
     products: [
@@ -116,18 +141,20 @@ var app = new Vue({
         total: '',
       }
     ],
-    listDeliveryOrder: [],
+    listDeliveryOrders: [],
+    listStores: [],
   },
   created() {
     this.getDeliveryOrder();
+    this.getStore();
   },
   methods: {
     async create() {
       try {
-        const response = await axios.post('/delivery-order', {
-          no_delivery_order: this.no_delivery_order,
+        const response = await axios.post('/invoice', {
+          stores_id: this.store.id,
           sales_id: this.sales.id,
-          vehicle_id: this.vehicle.id,
+          delivery_orders_id: this.delivery_order.id,
           products: this.products,
         });
         this.initForm();
@@ -143,7 +170,7 @@ var app = new Vue({
     async getDeliveryOrder() {
       try {
         const response = await axios.get('/delivery-order/get-data');
-        this.listDeliveryOrder = response.data;
+        this.listDeliveryOrders = response.data;
         console.log(response);
       } catch (error) {
         console.error(error);
@@ -159,6 +186,15 @@ var app = new Vue({
           this.products[i].qtyTmp = product[i].qty;
           this.products[i].total = '';
         }
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getStore() {
+      try {
+        const response = await axios.get('/store/get-data');
+        this.listStores = response.data;
         console.log(response);
       } catch (error) {
         console.error(error);
@@ -180,12 +216,14 @@ var app = new Vue({
       this.tgL_dokumen = '';
       this.sales = '',
       this.vehicle = '',
-      this.amount = '';
       this.products = [{
         product: '',
         qty: '',
       }];
     },
+    customLabel({name, location}) {
+      return `${name} - [${location}]`;
+    }
   },
   computed: {
     checkQty() {
@@ -196,6 +234,11 @@ var app = new Vue({
           return alert('Quantity is not enough');
         }
       }
+    },
+    grandTotal() {
+      return this.products.reduce(function(grandTotal, row) {
+        return grandTotal + row.total;
+      }, 0);
     }
   },
   watch: {
@@ -204,7 +247,7 @@ var app = new Vue({
       handler: function(val) {
         for(let i = 0; i < val.length; i++) {
           val[i].total = val[i].qty * val[i].product.price;
-          val[i].total = this.formatPrice(val[i].total);
+          this
         }
         this.checkQty;
       }

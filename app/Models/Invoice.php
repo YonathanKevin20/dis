@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+    protected $guarded = ['id'];
+
     public function store()
     {
         return $this->belongsTo('App\Models\Store', 'stores_id', 'id');

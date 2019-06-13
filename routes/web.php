@@ -25,6 +25,10 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('/get-data', 'ProductController@getData');
 	});
 
+	Route::group(['prefix' => 'store'], function() {
+		Route::get('/get-data', 'StoreController@getData');
+	});
+
 	Route::group(['prefix' => 'vehicle'], function() {
 		Route::get('/get-data', 'VehicleController@getData');
 	});
@@ -39,6 +43,10 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('/get-data-product/{delivery_order}', 'DeliveryOrderController@getDataProduct');
 		Route::get('/get-datatables', 'DeliveryOrderController@getDatatables');
 		Route::get('/view/{delivery_order}', 'DeliveryOrderController@view');
+	});
+
+	Route::group(['prefix' => 'invoice'], function() {
+		Route::get('/get-datatables', 'InvoiceController@getDatatables');
 	});
 
 	Route::resource('delivery-order', 'DeliveryOrderController');

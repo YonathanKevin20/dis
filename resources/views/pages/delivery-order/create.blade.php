@@ -101,7 +101,11 @@
                 </table>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </div>
           </div>
         </form>
 

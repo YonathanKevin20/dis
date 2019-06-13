@@ -16,10 +16,8 @@
                     <th>No.</th>
                     <th>No. Dokumen</th>
                     <th>Tgl. Dokumen</th>
-                    <th>Supervisor</th>
+                    <th>Customer</th>
                     <th>Sales</th>
-                    <th>No. Polisi</th>
-                    <th>Driver</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -41,27 +39,20 @@ $(document).ready(function() {
     processing: true,
     serverSide: true,
     ajax: {
-      url: '/delivery-order/get-datatables',
-      data: function(d) {
-        d.params = {
-          id: {{ Auth::user()->id }},
-        }
-      }
+      url: '/invoice/get-datatables',
     },
     order: [[ 2, 'asc' ]],
     columns: [
       { data: 'id', name: 'id', searchable: false, orderable: false },
-      { data: 'no_delivery_order', name: 'no_delivery_order' },
-      { data: 'created_at',
+      { data: 'delivery_order.no_delivery_order', name: 'deliveryOrder.no_delivery_order' },
+      { data: 'deliveryOrder.created_at',
         name: 'created_at',
         render: function(data) {
           return moment(data).format('DD MMM YYYY');
         }
       },
-      { data: 'spv.name', name: 'spv.name' },
+      { data: 'store.name', name: 'store.name' },
       { data: 'sales.name', name: 'sales.name' },
-      { data: 'vehicle.no_polisi', name: 'vehicle.no_polisi' },
-      { data: 'vehicle.driver', name: 'vehicle.driver' },
       /* ACTION */ {
         render: function (data, type, row) {
           return "<a href='/delivery-order/view/"+row.id+"' class='btn btn-sm btn-primary'>Show</a>";
