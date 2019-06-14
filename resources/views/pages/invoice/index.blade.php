@@ -40,13 +40,18 @@ $(document).ready(function() {
     serverSide: true,
     ajax: {
       url: '/invoice/get-datatables',
+      data: function(d) {
+        d.params = {
+          id: {{ Auth::user()->id }},
+        }
+      }
     },
     order: [[ 2, 'asc' ]],
     columns: [
       { data: 'id', name: 'id', searchable: false, orderable: false },
       { data: 'delivery_order.no_delivery_order', name: 'deliveryOrder.no_delivery_order' },
-      { data: 'deliveryOrder.created_at',
-        name: 'created_at',
+      { data: 'delivery_order.created_at',
+        name: 'deliveryOrder.created_at',
         render: function(data) {
           return moment(data).format('DD MMM YYYY');
         }

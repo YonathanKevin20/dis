@@ -65,16 +65,16 @@
                       <span>@{{ row.qty }}</span>
                     </td>
                     <td>
-                      <span>@{{ row.product.price | formatPrice }}</span>
+                      <span>@{{ row.product.price | currency }}</span>
                     </td>
                     <td>
-                      <span>@{{ row.total | formatPrice }}</span>
+                      <span>@{{ row.total | currency }}</span>
                     </td>
                   </tr>
                   <tr>
                     <td colspan="5" class="text-right font-weight-bold">Grand Total</td>
                     <td>
-                      <span>@{{ grandTotal | formatPrice }}</span>
+                      <span>@{{ grandTotal | currency }}</span>
                     </td>
                   </tr>
                 </tbody>

@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::group(['prefix' => 'user'], function() {
 		Route::get('/get-spv', 'UserController@getSpv');
 		Route::get('/get-sales', 'UserController@getSales');
+		Route::get('/change-password', 'UserController@changePasswordForm')->name('user.changePasswordForm');
 	});
 
 	Route::group(['prefix' => 'delivery-order'], function() {

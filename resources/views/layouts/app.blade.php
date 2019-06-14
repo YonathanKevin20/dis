@@ -73,7 +73,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{ route('user.changePasswordForm') }}">
                                         {{ __('Change Password') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -138,12 +138,6 @@
                 return moment(String(value)).format('DD MMMM YYYY, HH:mm:ss');
             }
         });
-        Vue.filter('formatPrice', function(value) {
-            if(value) {
-                let val = (value/1).toFixed(0).replace('.', ',')
-                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            }
-        });
         Vue.mixin({
             methods: {
                 humanDate(value) {
@@ -157,6 +151,20 @@
     <!-- Vue-ChartJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
     <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+    <!-- Vue Currency Filter Dependency -->
+    <script src="https://unpkg.com/vue-currency-filter@3.2.3/dist/vue-currency-filter.iife.js"></script>
+    <script type="text/javascript">
+        if(VueCurrencyFilter) {
+            Vue.use(VueCurrencyFilter, {
+                symbol: "",
+                thousandsSeparator: ".",
+                fractionCount: 0,
+                fractionSeparator: ".",
+                symbolPosition: "front",
+                symbolSpacing: false
+            })
+        }
+    </script>
 
     <!-- Global Components -->
     <script type="text/javascript">

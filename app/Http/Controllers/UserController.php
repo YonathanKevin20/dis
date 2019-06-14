@@ -31,6 +31,11 @@ class UserController extends Controller
         //
     }
 
+    public function changePasswordForm()
+    {
+        return view('pages.user.change_password');
+    }
+
     public function show($id)
     {
         //

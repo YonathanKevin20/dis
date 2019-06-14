@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\DeliveryOrderProduct;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
+use Auth;
 use DataTables;
 
 class InvoiceController extends Controller
@@ -28,10 +30,10 @@ class InvoiceController extends Controller
     {
         $model = Invoice::with(['store', 'sales', 'deliveryOrder']);
 
-        // $params = $req->params;
-        // if($params && Auth::user()->role == 2) {
-        //     $model->where('sales_id', $params['id']);
-        // }
+        $params = $req->params;
+        if($params && Auth::user()->role == 2) {
+            $model->where('invoices.sales_id', $params['id']);
+        }
 
         return DataTables::eloquent($model)->toJson();
     }
@@ -45,6 +47,14 @@ class InvoiceController extends Controller
         ]);
 
         $products = $req->products;
+        $delivery_order_product = DeliveryOrderProduct::where('delivery_orders_id', $req->delivery_orders_id)->get();
+        foreach($delivery_order_product as $key => $value) {
+            $total = $value->qty - $products[$key]['qty'];
+            $value->update([
+                'qty' => $total,
+            ]);
+        }
+
         foreach($products as $product) {
             InvoiceProduct::create([
                 'invoices_id' => $invoice->id,
