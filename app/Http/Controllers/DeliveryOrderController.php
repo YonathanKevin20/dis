@@ -39,7 +39,10 @@ class DeliveryOrderController extends Controller
 
     public function getData(Request $req)
     {
-        $model = DeliveryOrder::with(['spv', 'sales', 'vehicle'])->where('sales_id', Auth::user()->id)->get();
+        $model = DeliveryOrder::with(['spv', 'sales', 'vehicle'])
+                    ->where('sales_id', Auth::user()->id)
+                    ->where('status', '!=', '2')
+                    ->get();
 
         return response()->json($model);
     }

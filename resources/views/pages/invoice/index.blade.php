@@ -15,7 +15,7 @@
                   <tr>
                     <th>No.</th>
                     <th>No. Dokumen</th>
-                    <th>Tgl. Dokumen</th>
+                    <th>Tgl. Invoice</th>
                     <th>Customer</th>
                     <th>Sales</th>
                     <th></th>
@@ -50,8 +50,7 @@ $(document).ready(function() {
     columns: [
       { data: null, name: null, searchable: false, orderable: false },
       { data: 'delivery_order.no_delivery_order', name: 'deliveryOrder.no_delivery_order' },
-      { data: 'delivery_order.created_at',
-        name: 'deliveryOrder.created_at',
+      { data: 'created_at', name: 'created_at',
         render: function(data) {
           return moment(data).format('DD MMM YYYY');
         }

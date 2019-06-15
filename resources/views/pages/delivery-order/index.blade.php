@@ -20,6 +20,7 @@
                     <th>Sales</th>
                     <th>No. Polisi</th>
                     <th>Driver</th>
+                    <th>Status</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -52,8 +53,7 @@ $(document).ready(function() {
     columns: [
       { data: null, name: null, searchable: false, orderable: false },
       { data: 'no_delivery_order', name: 'no_delivery_order' },
-      { data: 'created_at',
-        name: 'created_at',
+      { data: 'created_at', name: 'created_at',
         render: function(data) {
           return moment(data).format('DD MMM YYYY');
         }
@@ -62,6 +62,19 @@ $(document).ready(function() {
       { data: 'sales.name', name: 'sales.name' },
       { data: 'vehicle.no_polisi', name: 'vehicle.no_polisi' },
       { data: 'vehicle.driver', name: 'vehicle.driver' },
+      { data: 'status', name: 'status',
+        render: function(data) {
+          if(data == '0') {
+            return '<span class="badge badge-pill badge-primary">New</span>';
+          }
+          else if(data == '1') {
+            return '<span class="badge badge-pill badge-warning">On Progress</span>';
+          }
+          else if(data == '2') {
+            return '<span class="badge badge-pill badge-success">Complete</span>';
+          }
+        }
+      },
       /* ACTION */ {
         render: function (data, type, row) {
           return "<a href='/delivery-order/view/"+row.id+"' class='btn btn-sm btn-primary'>Show</a>";

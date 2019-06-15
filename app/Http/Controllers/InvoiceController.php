@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\DeliveryOrder;
 use App\Models\DeliveryOrderProduct;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
@@ -47,6 +48,7 @@ class InvoiceController extends Controller
         ]);
 
         $this->sumQty($req->products, $req->delivery_orders_id);
+        $this->changeStatus($req->delivery_orders_id);
 
         $products = $req->products;
 
@@ -88,11 +90,28 @@ class InvoiceController extends Controller
 
     protected function sumQty($products, $delivery_orders_id)
     {
-        $delivery_order_product = DeliveryOrderProduct::where('delivery_orders_id', $delivery_orders_id)->get();
-        foreach($delivery_order_product as $key => $value) {
+        $model = DeliveryOrderProduct::where('delivery_orders_id', $delivery_orders_id)->get();
+        foreach($model as $key => $value) {
             $total = $value->qty - $products[$key]['qty'];
             $value->update([
                 'qty' => $total,
+            ]);
+        }
+    }
+
+    protected function changeStatus($delivery_orders_id)
+    {
+        $qty = DeliveryOrderProduct::where('delivery_orders_id', $delivery_orders_id)->sum('qty');
+        if($qty == 0) {
+            $model = DeliveryOrder::findOrFail($delivery_orders_id);
+            $model->update([
+                'status' => '2',
+            ]);
+        }
+        else {
+            $model = DeliveryOrder::findOrFail($delivery_orders_id);
+            $model->update([
+                'status' => '1',
             ]);
         }
     }

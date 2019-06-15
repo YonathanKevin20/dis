@@ -11,6 +11,14 @@
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
+                <label class="font-weight-bold">Tgl. Invoice</label>
+                <input type="text" class="form-control" v-model="tgl_invoice" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
                 <label class="font-weight-bold">No. Dokumen</label>
                 <input type="text" class="form-control" v-model="delivery_order.no_delivery_order" readonly>
               </div>
@@ -95,6 +103,7 @@ var app = new Vue({
   el: '#app',
   data: {
     id: {{ $id }},
+    tgl_invoice: '',
     delivery_order: '',
     tgl_dokumen: '',
     store: '',
@@ -116,6 +125,7 @@ var app = new Vue({
         const response = await axios.get('/invoice/'+this.id);
         let data = response.data.data;
         let product = response.data.product;
+        this.tgl_invoice = this.humanDate(data.created_at);
         this.delivery_order = data.delivery_order;
         this.tgl_dokumen = this.humanDate(data.delivery_order.created_at);
         this.store = data.store;
