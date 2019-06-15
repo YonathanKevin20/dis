@@ -48,7 +48,7 @@ $(document).ready(function() {
     },
     order: [[ 2, 'asc' ]],
     columns: [
-      { data: 'id', name: 'id', searchable: false, orderable: false },
+      { data: null, name: null, searchable: false, orderable: false },
       { data: 'delivery_order.no_delivery_order', name: 'deliveryOrder.no_delivery_order' },
       { data: 'delivery_order.created_at',
         name: 'deliveryOrder.created_at',
@@ -65,11 +65,12 @@ $(document).ready(function() {
       },
     ]
   });
-  tables.on('order.dt search.dt', function () {
-    tables.column(0, {search:'applied', order:'applied'}).nodes().each(function (cell, i) {
-      cell.innerHTML = i+1;
-    });
-  }).draw();
+  tables.on('draw.dt', function () {
+      var info = tables.page.info();
+      tables.column(0, { search: 'applied', order: 'applied', page: 'applied' }).nodes().each(function (cell, i) {
+          cell.innerHTML = i + 1 + info.start;
+      });
+  });
 });
 
 var app = new Vue({

@@ -28,7 +28,7 @@ class InvoiceController extends Controller
 
     public function getDatatables(Request $req)
     {
-        $model = Invoice::with(['store', 'sales', 'deliveryOrder']);
+        $model = Invoice::with(['store', 'sales', 'deliveryOrder'])->select('invoices.*');
 
         $params = $req->params;
         if($params && Auth::user()->role == 2) {
@@ -46,14 +46,9 @@ class InvoiceController extends Controller
             'delivery_orders_id' => $req->delivery_orders_id,
         ]);
 
+        $this->sumQty($req->products, $req->delivery_orders_id);
+
         $products = $req->products;
-        $delivery_order_product = DeliveryOrderProduct::where('delivery_orders_id', $req->delivery_orders_id)->get();
-        foreach($delivery_order_product as $key => $value) {
-            $total = $value->qty - $products[$key]['qty'];
-            $value->update([
-                'qty' => $total,
-            ]);
-        }
 
         foreach($products as $product) {
             InvoiceProduct::create([
@@ -89,5 +84,16 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    protected function sumQty($products, $delivery_orders_id)
+    {
+        $delivery_order_product = DeliveryOrderProduct::where('delivery_orders_id', $delivery_orders_id)->get();
+        foreach($delivery_order_product as $key => $value) {
+            $total = $value->qty - $products[$key]['qty'];
+            $value->update([
+                'qty' => $total,
+            ]);
+        }
     }
 }

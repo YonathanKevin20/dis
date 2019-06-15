@@ -27,7 +27,7 @@ class DeliveryOrderController extends Controller
 
     public function getDatatables(Request $req)
     {
-        $model = DeliveryOrder::with(['spv', 'sales', 'vehicle']);
+        $model = DeliveryOrder::with(['spv', 'sales', 'vehicle'])->select('delivery_orders.*');
 
         $params = $req->params;
         if($params && Auth::user()->role == 2) {
