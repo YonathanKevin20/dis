@@ -11,6 +11,17 @@
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
+                <label class="font-weight-bold">Status</label><br>
+                <div v-html="status"></div>
+              </div>
+            </div>
+            <div class="col-md-3 offset-md-6 text-right">
+              <a href="javascript:history.go(-1)" class="btn btn-secondary">Back</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
                 <label class="font-weight-bold">No. Dokumen</label>
                 <input type="text" class="form-control" v-model="no_delivery_order" readonly>
               </div>
@@ -26,9 +37,6 @@
                 <label class="font-weight-bold">Supervisor</label>
                 <input type="text" class="form-control" v-model="spv.name" readonly>
               </div>
-            </div>
-            <div class="col-md-3 text-right">
-              <a href="javascript:history.go(-1)" class="btn btn-secondary">Back</a>
             </div>
           </div>
           <div class="row">
@@ -95,6 +103,7 @@ var app = new Vue({
   el: '#app',
   data: {
     id: {{ $id }},
+    status: '',
     no_delivery_order: '',
     tgl_dokumen: '',
     spv: '',
@@ -116,6 +125,7 @@ var app = new Vue({
         const response = await axios.get('/delivery-order/'+this.id);
         let data = response.data.data;
         let product = response.data.product;
+        this.status = this.formatStatus(data.status);
         this.no_delivery_order = data.no_delivery_order;
         this.tgl_dokumen = this.humanDate(data.created_at);
         this.spv = data.spv;

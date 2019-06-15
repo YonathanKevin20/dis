@@ -138,23 +138,21 @@
                 return moment(String(value)).format('DD MMMM YYYY, HH:mm:ss');
             }
         });
-        Vue.filter('formatStatus', function(value) {
-            if(value) {
-                if(value == '0') {
-                    return '<span class="badge badge-pill badge-primary">New</span>';
-                }
-                else if(value == '1') {
-                    return '<span class="badge badge-pill badge-warning">On Progress</span>';
-                }
-                else if(value == '2') {
-                    return '<span class="badge badge-pill badge-success">Complete</span>';
-                }
-            }
-        });
         Vue.mixin({
             methods: {
                 humanDate(value) {
                     return moment(String(value)).format('DD MMM YYYY');
+                },
+                formatStatus(value) {
+                    if(value == '0') {
+                        return '<span class="badge badge-pill badge-primary">New</span>';
+                    }
+                    else if(value == '1') {
+                        return '<span class="badge badge-pill badge-warning">On Progress</span>';
+                    }
+                    else if(value == '2') {
+                        return '<span class="badge badge-pill badge-success">Complete</span>';
+                    }
                 },
             }
         });
