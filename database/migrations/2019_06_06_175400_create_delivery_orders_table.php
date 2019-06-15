@@ -19,6 +19,7 @@ class CreateDeliveryOrdersTable extends Migration
             $table->unsignedInteger('spvs_id');
             $table->unsignedInteger('sales_id');
             $table->unsignedInteger('vehicles_id');
+            $table->enum('status', ['0', '1', '2'])->default('0');
             $table->timestamps();
             $table->softDeletes();
 
