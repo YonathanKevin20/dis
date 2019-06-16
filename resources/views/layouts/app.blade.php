@@ -22,7 +22,7 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
-    <div id="app">
+    <div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -34,7 +34,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+                    <ul id="nav" class="navbar-nav mr-auto">
                         @auth
                             @if(Auth::user()->role == 1)
                                 <li class="nav-item">
@@ -49,7 +49,7 @@
                                 </li>
                             @endif
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }}</a>
+                                <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }} <span class="badge badge-danger badge-pill" v-show="display">@{{ statusNew }}</span></a>
                             </li>
                         @endauth
                     </ul>
@@ -93,9 +93,11 @@
             </div>
         </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        <div id="app">
+            <main class="py-4">
+                @yield('content')
+            </main>
+        </div>
     </div>
     <!-- Scripts -->
     <!--<script src="{{ asset('js/app.js') }}" defer></script>-->
@@ -181,6 +183,40 @@
     <script type="text/javascript">
         Vue.component('multiselect', window.VueMultiselect.default);
     </script>
+
+    @auth
+      <script type="text/javascript">
+      var nav = new Vue({
+        el: '#nav',
+        data: {
+          statusNew: 0,
+          display: false,
+        },
+        created() {
+          this.getStatus();
+        },
+        methods: {
+          async getStatus() {
+            this.display = false;
+            try {
+              const response = await axios.get('/status/get-data', {
+                params: {
+                  sales_id: {{ Auth::user()->id }},
+                }
+              });
+              this.statusNew = response.data;
+              if(this.statusNew != 0) {
+                  this.display = true;
+              }
+              console.log(response);
+            } catch (error) {
+              console.error(error);
+            }
+          },
+        }
+      });
+      </script>
+    @endauth
 
     @stack('scripts')
 </body>
