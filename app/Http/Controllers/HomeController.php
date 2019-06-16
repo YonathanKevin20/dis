@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\InvoiceProduct;
+use App\Models\Store;
+use DB;
 
 class HomeController extends Controller
 {
@@ -24,5 +27,26 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function getRevenue(Request $req)
+    {
+        $model = InvoiceProduct::sum('total');
+
+        return response()->json($model); 
+    }
+
+    public function getItemsSold(Request $req)
+    {
+        $model = InvoiceProduct::select('products_id')->groupBy('products_id')->get();
+
+        return response()->json($model); 
+    }
+
+    public function getStore(Request $req)
+    {
+        $model = Store::count('id');
+
+        return response()->json($model); 
     }
 }
