@@ -42,15 +42,21 @@ class DatabaseSeeder extends Seeder
         DB::table('stores')->insert([
             [
                 'name' => 'Alfamart',
-                'location' => 'Bandung'
+                'location' => 'Bandung',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Indomaret',
-                'location' => 'Jakarta'
+                'location' => 'Jakarta',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Yomart',
-                'location' => 'Bandung'
+                'location' => 'Bandung',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]
         ]);
 

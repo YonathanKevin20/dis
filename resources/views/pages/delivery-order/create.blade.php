@@ -13,8 +13,7 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="font-weight-bold">No. Dokumen</label>
-                  <input type="text" class="form-control" v-model="no_delivery_order" required>
-                  <div class="invalid-feedback">Required</div>
+                  <input type="text" class="form-control" v-model="no_delivery_order" readonly>
                 </div>
               </div>
               <div class="col-md-3">
@@ -156,6 +155,7 @@ var app = new Vue({
           products: this.products,
         });
         this.initForm();
+        nav.getStatus();
         Toast.fire({
           type: 'success',
           title: 'Created'

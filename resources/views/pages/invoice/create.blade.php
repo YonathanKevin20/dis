@@ -164,6 +164,7 @@ var app = new Vue({
           products: this.products,
         });
         this.initForm();
+        nav.getStatus();
         Toast.fire({
           type: 'success',
           title: 'Created'

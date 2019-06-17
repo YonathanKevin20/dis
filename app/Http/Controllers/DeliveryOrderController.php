@@ -18,7 +18,13 @@ class DeliveryOrderController extends Controller
     public function create()
     {
         $model = DeliveryOrder::latest()->first();
-        $no_delivery_order = generateNoDeliveryOrder($model->id);
+        if($model) {
+            $id = $model->id;
+        }
+        else {
+            $id = 1;
+        }
+        $no_delivery_order = generateNoDeliveryOrder($id);
         return view('pages.delivery-order.create', compact('no_delivery_order'));
     }
 

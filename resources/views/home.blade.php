@@ -76,7 +76,7 @@ var app = new Vue({
     async getItemsSold() {
       try {
         const response = await axios.get('/statistic/get-items-sold');
-        this.total.sold = response.data.length;
+        this.total.sold = response.data;
         console.log(response);
       } catch (error) {
         console.error(error);

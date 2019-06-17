@@ -27,7 +27,7 @@ class HomeController extends Controller
 
     public function getItemsSold(Request $req)
     {
-        $model = InvoiceProduct::select('products_id')->groupBy('products_id')->get();
+        $model = InvoiceProduct::sum('qty');
 
         return response()->json($model); 
     }
