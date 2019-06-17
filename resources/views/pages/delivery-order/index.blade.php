@@ -65,7 +65,7 @@ $(document).ready(function() {
       { data: 'status', name: 'status',
         render: function(data) {
           if(data == '0') {
-            return '<span class="badge badge-pill badge-primary">New</span>';
+            return '<span class="badge badge-pill badge-danger">New</span>';
           }
           else if(data == '1') {
             return '<span class="badge badge-pill badge-warning">On Progress</span>';
