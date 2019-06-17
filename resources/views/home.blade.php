@@ -29,9 +29,9 @@
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">@{{ total.store }}</h5>
+                  <h5 class="card-title">@{{ total.store.new }}</h5>
                   <p class="card-text">New Customers</p>
-                  <h5 class="card-title">@{{ total.store }}</h5>
+                  <h5 class="card-title">@{{ total.store.existing }}</h5>
                   <p class="card-text">Existing Customers</p>
                 </div>
               </div>
@@ -52,7 +52,10 @@ var app = new Vue({
     total: {
       revenue: 0,
       sold: 0,
-      store: 0,
+      store: {
+        new: 0,
+        existing: 0,
+      },
     }
   },
   created() {
@@ -82,7 +85,10 @@ var app = new Vue({
     async getStore() {
       try {
         const response = await axios.get('/statistic/get-store');
-        this.total.store = response.data;
+        let new_store = response.data.new_store;
+        let existing_store = response.data.existing_store;
+        this.total.store.new = new_store;
+        this.total.store.existing = existing_store;
         console.log(response);
       } catch (error) {
         console.error(error);

@@ -8,21 +8,11 @@ use App\Models\Store;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         return view('home');
@@ -44,8 +34,14 @@ class HomeController extends Controller
 
     public function getStore(Request $req)
     {
-        $model = Store::count('id');
+        $new_store = Store::whereMonth('created_at', date('m'))->count('id');
+        $existing_store = Store::whereMonth('created_at', '!=', date('m'))->count('id');
 
-        return response()->json($model); 
+        $result = [
+            'new_store' => $new_store,
+            'existing_store' => $existing_store,
+        ];
+
+        return response()->json($result);
     }
 }
