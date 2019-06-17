@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'store'], function() {
 		Route::get('/get-data', 'StoreController@getData');
+		Route::get('/get-datatables', 'StoreController@getDatatables');
 	});
 
 	Route::group(['prefix' => 'vehicle'], function() {
@@ -63,4 +64,5 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::resource('delivery-order', 'DeliveryOrderController');
 	Route::resource('invoice', 'InvoiceController');
+	Route::apiResource('store', 'StoreController');
 });

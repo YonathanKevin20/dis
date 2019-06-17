@@ -36,21 +36,27 @@
                     <!-- Left Side Of Navbar -->
                     <ul id="nav" class="navbar-nav mr-auto">
                         @auth
-                            @if(Auth::user()->role == 1)
+                            @if(Auth::user()->role == 1) {{-- SUPERVISOR --}}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('delivery-order.create') }}">{{ __('Create Delivery Order') }}</a>
                                 </li>
-                            @elseif(Auth::user()->role == 2)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }} <span class="badge badge-danger badge-pill" v-show="display">@{{ statusNew }}</span></a>
+                                </li>
+                            @elseif(Auth::user()->role == 2) {{-- SALES --}}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('invoice.create') }}">{{ __('Create Invoice') }}</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('invoice.index') }}">{{ __('List Invoice') }}</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }} <span class="badge badge-danger badge-pill" v-show="display">@{{ statusNew }}</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('store.index') }}">{{ __('Customer') }}</a>
+                                </li>
                             @endif
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }} <span class="badge badge-danger badge-pill" v-show="display">@{{ statusNew }}</span></a>
-                            </li>
                         @endauth
                     </ul>
 
