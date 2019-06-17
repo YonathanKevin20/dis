@@ -90,7 +90,7 @@
                         <input type="text" class="form-control" v-model="row.product.name" readonly>
                       </td>
                       <td>
-                        <input type="text" class="form-control" v-model="row.qty" required>
+                        <input type="number" class="form-control" v-model="row.qty" required>
                         <div class="invalid-feedback">Required</div>
                       </td>
                       <td>
@@ -101,7 +101,11 @@
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="5" class="text-right font-weight-bold">Grand Total</td>
+                      <td colspan="3" class="text-right font-weight-bold">Grand QTY</td>
+                      <td>
+                        <span>@{{ grandQty }}</span>
+                      </td>
+                      <td class="text-right font-weight-bold">Grand Total</td>
                       <td>
                         <span>@{{ grandTotal | currency }}</span>
                       </td>
@@ -138,9 +142,11 @@ var app = new Vue({
       {
         product: '',
         qty: '',
-        total: '',
+        total: 0,
       }
     ],
+    grandQty: 0,
+    grandTotal: 0,
     listDeliveryOrders: [],
     listStores: [],
   },
@@ -220,7 +226,10 @@ var app = new Vue({
       this.products = [{
         product: '',
         qty: '',
+        total: 0,
       }];
+      this.grandQty = 0;
+      this.grandTotal = 0;
     },
     customLabelStore({name, location}) {
       return `${name} - [${location}]`;
@@ -236,10 +245,9 @@ var app = new Vue({
         }
       }
     },
-    grandTotal() {
-      return this.products.reduce(function(grandTotal, row) {
-        return grandTotal + row.total;
-      }, 0);
+    sumAll() {
+      this.grandQty = this.products.reduce((sum, row) => +sum + +row.qty, 0);
+      this.grandTotal = this.products.reduce((sum, row) => +sum + +row.total, 0);
     }
   },
   watch: {
@@ -248,9 +256,9 @@ var app = new Vue({
       handler: function(val) {
         for(let i = 0; i < val.length; i++) {
           val[i].total = val[i].qty * val[i].product.price;
-          this
         }
         this.checkQty;
+        this.sumAll;
       }
     }
   }

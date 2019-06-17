@@ -49,7 +49,7 @@ $(document).ready(function() {
         }
       }
     },
-    order: [[ 2, 'asc' ]],
+    order: [[ 2, 'desc' ]],
     columns: [
       { data: null, name: null, searchable: false, orderable: false },
       { data: 'no_delivery_order', name: 'no_delivery_order' },

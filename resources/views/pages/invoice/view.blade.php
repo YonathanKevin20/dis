@@ -80,7 +80,11 @@
                     </td>
                   </tr>
                   <tr>
-                    <td colspan="5" class="text-right font-weight-bold">Grand Total</td>
+                    <td colspan="3" class="text-right font-weight-bold">Grand QTY</td>
+                    <td>
+                      <span>@{{ grandQty }}</span>
+                    </td>
+                    <td class="text-right font-weight-bold">Grand Total</td>
                     <td>
                       <span>@{{ grandTotal | currency }}</span>
                     </td>
@@ -112,9 +116,12 @@ var app = new Vue({
     products: [
       {
         product: '',
-        qty: ''
+        qty: '',
+        total: 0,
       }
     ],
+    grandQty: 0,
+    grandTotal: 0,
   },
   created() {
     this.initForm();
@@ -131,6 +138,7 @@ var app = new Vue({
         this.store = data.store;
         this.sales = data.sales;
         this.products = product;
+        this.sumAll;
         console.log(response);
       } catch (error) {
         console.error(error);
@@ -138,10 +146,9 @@ var app = new Vue({
     },
   },
   computed: {
-    grandTotal() {
-      return this.products.reduce(function(grandTotal, row) {
-        return grandTotal + row.total;
-      }, 0);
+    sumAll() {
+      this.grandQty = this.products.reduce((sum, row) => +sum + +row.qty, 0);
+      this.grandTotal = this.products.reduce((sum, row) => +sum + +row.total, 0);
     }
   },
 })

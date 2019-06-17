@@ -10,7 +10,7 @@ class StoreController extends Controller
 {
     public function getData(Request $req)
     {
-        $model = Store::all();
+        $model = Store::orderBy('name')->get();
 
         return response()->json($model); 
     }
