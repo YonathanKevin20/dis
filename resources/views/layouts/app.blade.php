@@ -43,6 +43,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('delivery-order.index') }}">{{ __('List Delivery Order') }} <span class="badge badge-danger badge-pill" v-show="display">@{{ statusNew }}</span></a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('invoice.index') }}">{{ __('List Invoice') }}</a>
+                                </li>
                             @elseif(Auth::user()->role == 2) {{-- SALES --}}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('invoice.create') }}">{{ __('Create Invoice') }}</a>
