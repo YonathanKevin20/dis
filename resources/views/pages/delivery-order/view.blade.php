@@ -85,6 +85,12 @@
                       <input type="text" class="form-control" v-model="row.qty" readonly>
                     </td>
                   </tr>
+                  <tr>
+                    <td colspan="3" class="text-right font-weight-bold">Grand QTY</td>
+                    <td>
+                      <span>@{{ grandQty }}</span>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -115,6 +121,7 @@ var app = new Vue({
         qty: ''
       }
     ],
+    grandQty: 0,
   },
   created() {
     this.initForm();
@@ -132,12 +139,18 @@ var app = new Vue({
         this.sales = data.sales;
         this.vehicle = data.vehicle;
         this.products = product;
+        this.sumAll;
         console.log(response);
       } catch (error) {
         console.error(error);
       }
     },
-  }
+  },
+  computed: {
+    sumAll() {
+      this.grandQty = this.products.reduce((sum, row) => +sum + +row.qty, 0);
+    }
+  },
 })
 </script>
 @endpush

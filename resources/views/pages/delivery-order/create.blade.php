@@ -91,11 +91,17 @@
                       <input type="text" class="form-control" v-model="row.product.name" readonly>
                     </td>
                     <td>
-                      <input type="text" class="form-control" v-model="row.qty" required>
+                      <input type="number" class="form-control" v-model="row.qty" required>
                       <div class="invalid-feedback">Required</div>
                     </td>
                     <td>
                       <button type="button" class="btn btn-danger btn-sm" @click="removeRow(index)">X</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="text-right font-weight-bold">Grand QTY</td>
+                    <td>
+                      <span>@{{ grandQty }}</span>
                     </td>
                   </tr>
                   </tbody>
@@ -130,6 +136,7 @@ var app = new Vue({
         qty: ''
       }
     ],
+    grandQty: 0,
     listSales: [],
     listVehicles: [],
     listProducts: [],
@@ -204,6 +211,19 @@ var app = new Vue({
     removeRow(index) {
       this.products.splice(index, 1);
     },
+  },
+  computed: {
+    sumAll() {
+      this.grandQty = this.products.reduce((sum, row) => +sum + +row.qty, 0);
+    }
+  },
+  watch: {
+    products: {
+      deep: true,
+      handler: function(val) {
+        this.sumAll;
+      }
+    }
   }
 })
 </script>
