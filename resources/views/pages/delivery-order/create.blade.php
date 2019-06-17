@@ -121,7 +121,7 @@
 var app = new Vue({
   el: '#app',
   data: {
-    no_delivery_order: '',
+    no_delivery_order: '{{ $no_delivery_order }}',
     sales: '',
     vehicle: '',
     products: [

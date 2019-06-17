@@ -17,7 +17,9 @@ class DeliveryOrderController extends Controller
 
     public function create()
     {
-        return view('pages.delivery-order.create');
+        $model = DeliveryOrder::latest()->first();
+        $no_delivery_order = generateNoDeliveryOrder($model->id);
+        return view('pages.delivery-order.create', compact('no_delivery_order'));
     }
 
     public function view($id)
