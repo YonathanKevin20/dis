@@ -62,14 +62,24 @@ Vue.component('line-chart', {
     return {
       datacollection: {
         labels: [],
-        datasets: [{
-          label: 'QTY',
-          backgroundColor: '',
-          borderColor: 'rgb(0, 0, 0)',
-          borderWidth: 2,
-          fill: false,
-          data: []
-        }]
+        datasets: [
+          {
+            label: 'Realitation',
+            backgroundColor: 'transparent',
+            borderColor: '#2babab',
+            borderWidth: 2,
+            fill: false,
+            data: [],
+          },
+          {
+            label: 'Target',
+            backgroundColor: 'transparent',
+            borderColor: '#ff6384',
+            borderWidth: 2,
+            fill: false,
+            data: [],
+          }
+        ]
       },
       options: {
         title: {
@@ -104,7 +114,8 @@ Vue.component('line-chart', {
           params: {}
         }).then((response) => {
           this.datacollection.labels = response.data.label;
-          this.datacollection.datasets[0].data = response.data.data;
+          this.datacollection.datasets[0].data = response.data.data1;
+          this.datacollection.datasets[1].data = response.data.data2;
           console.log(response);
         }).catch((error) => {
           console.log(error);

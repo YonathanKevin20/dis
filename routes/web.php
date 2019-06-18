@@ -21,6 +21,10 @@ Route::post('/reset-password', 'Auth\ResetPasswordController@resetPassword');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
+	Route::group(['prefix' => 'import-target'], function() {
+		Route::get('/get-datatables', 'ImportTargetController@getDatatables');
+	});
+
 	Route::group(['prefix' => 'statistic'], function() {
 		Route::get('/get-revenue', 'HomeController@getRevenue');
 		Route::get('/get-items-sold', 'HomeController@getItemsSold');
@@ -30,6 +34,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::group(['prefix' => 'product'], function() {
 		Route::get('/get-data', 'ProductController@getData');
 		Route::get('/get-chart', 'ProductController@getChart');
+		Route::get('/import-form', 'ProductController@importForm')->name('product.importForm');
+		Route::post('/import', 'ProductController@import');
+		Route::get('/download-template-xlsx', 'ProductController@downloadTemplateXlsx');
 	});
 
 	Route::group(['prefix' => 'status'], function() {
