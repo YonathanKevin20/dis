@@ -37,6 +37,15 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-12">
+              <line-chart
+                :chart-id="product.id"
+                :chart-title="product.title"
+                :chart-url="product.url">
+              </line-chart>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +55,67 @@
 
 @push('scripts')
 <script type="text/javascript">
+Vue.component('line-chart', {
+  extends: VueChartJs.Line,
+  props: ['chartTitle', 'chartUrl'],
+  data: function () {
+    return {
+      datacollection: {
+        labels: [],
+        datasets: [{
+          label: 'QTY',
+          backgroundColor: '',
+          borderColor: 'rgb(0, 0, 0)',
+          borderWidth: 2,
+          fill: false,
+          data: []
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: ''
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              autoSkip: false,
+              maxRotation: 90,
+              minRotation: 30,
+            }
+          }]
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    }
+  },
+  created() {
+    this.getChartData();
+  },
+  methods: {
+    getChartData() {
+      axios.get(this.chartUrl, {
+          params: {}
+        }).then((response) => {
+          this.datacollection.labels = response.data.label;
+          this.datacollection.datasets[0].data = response.data.data;
+          console.log(response);
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          this.options.title.text = this.chartTitle;
+          this.renderChart(this.datacollection, this.options);
+        });
+    },
+  }
+});
+
 var app = new Vue({
   el: '#app',
   data: {
@@ -56,7 +126,12 @@ var app = new Vue({
         new: 0,
         existing: 0,
       },
-    }
+    },
+    product: {
+      id: 'product-chart',
+      title: 'Product Chart',
+      url: 'product/get-chart',
+    },
   },
   created() {
     this.getRevenue();

@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'product'], function() {
 		Route::get('/get-data', 'ProductController@getData');
+		Route::get('/get-chart', 'ProductController@getChart');
 	});
 
 	Route::group(['prefix' => 'status'], function() {
