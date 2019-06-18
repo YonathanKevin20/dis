@@ -17,7 +17,7 @@ class DeliveryOrderController extends Controller
 
     public function create()
     {
-        $model = DeliveryOrder::latest()->first();
+        $model = DeliveryOrder::latest()->whereDay('created_at', date('d'))->first();
         if($model) {
             $id = $model->id;
         }
