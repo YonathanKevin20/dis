@@ -23,20 +23,19 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => 'auth'], function () {
 	Route::group(['prefix' => 'import-target'], function() {
 		Route::get('/get-datatables', 'ImportTargetController@getDatatables');
+		Route::post('/import', 'ImportTargetController@import');
+		Route::get('/download-template-xlsx', 'ImportTargetController@downloadTemplateXlsx');
 	});
 
 	Route::group(['prefix' => 'statistic'], function() {
 		Route::get('/get-revenue', 'HomeController@getRevenue');
 		Route::get('/get-items-sold', 'HomeController@getItemsSold');
 		Route::get('/get-store', 'HomeController@getStore');
+		Route::get('/get-chart', 'HomeController@getChart');
 	});
 
 	Route::group(['prefix' => 'product'], function() {
 		Route::get('/get-data', 'ProductController@getData');
-		Route::get('/get-chart', 'ProductController@getChart');
-		Route::get('/import-form', 'ProductController@importForm')->name('product.importForm');
-		Route::post('/import', 'ProductController@import');
-		Route::get('/download-template-xlsx', 'ProductController@downloadTemplateXlsx');
 	});
 
 	Route::group(['prefix' => 'status'], function() {
@@ -73,4 +72,5 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('delivery-order', 'DeliveryOrderController');
 	Route::resource('invoice', 'InvoiceController');
 	Route::apiResource('store', 'StoreController');
+	Route::apiResource('import-target', 'ImportTargetController');
 });

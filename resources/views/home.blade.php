@@ -141,7 +141,7 @@ var app = new Vue({
     product: {
       id: 'product-chart',
       title: 'Product Chart',
-      url: 'product/get-chart',
+      url: '/statistic/get-chart',
     },
   },
   created() {

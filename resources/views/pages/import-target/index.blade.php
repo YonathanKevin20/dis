@@ -72,7 +72,7 @@ var app = new Vue({
     file: '',
     disabled: true,
     url_download: {
-      xlsx: '/product/download-template-xlsx',
+      xlsx: '/import-target/download-template-xlsx',
     },
   },
   created() {
@@ -81,7 +81,7 @@ var app = new Vue({
     async submitFile() {
       let formData = new FormData();
       formData.append('file', this.file);
-      const { data } = await axios.post('/product/import', formData, {
+      const { data } = await axios.post('/import-target/import', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

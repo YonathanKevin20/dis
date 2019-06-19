@@ -47,7 +47,7 @@
                                     <a class="nav-link" href="{{ route('invoice.index') }}">{{ __('List Invoice') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('product.importForm') }}">{{ __('Import Target') }}</a>
+                                    <a class="nav-link" href="{{ route('import-target.index') }}">{{ __('Import Target') }}</a>
                                 </li>
                             @elseif(Auth::user()->role == 2) {{-- SALES --}}
                                 <li class="nav-item">
