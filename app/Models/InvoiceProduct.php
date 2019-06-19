@@ -9,6 +9,9 @@ class InvoiceProduct extends Model
 {
     use SoftDeletes;
     protected $guarded = ['id'];
+    protected $casts = [
+        'qty' => 'integer',
+    ];
 
     public function product()
     {

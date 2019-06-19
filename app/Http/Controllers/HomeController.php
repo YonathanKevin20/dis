@@ -49,15 +49,21 @@ class HomeController extends Controller
 
     public function getChart(Request $req)
     {
-        $label = InvoiceProduct::with(['product'])->select('products_id')->groupBy('products_id')->orderBy('products_id')->get()->pluck('product.name');
+        $label = Product::orderBy('id')->pluck('name');
 
-        $data1 = InvoiceProduct::orderBy('products_id')->get()->groupBy('products_id')->map(function($row) {
-            return $row->sum('qty');
-        })->values();
+        $data1 = Product::selectRaw('products.id, IFNULL(SUM(qty), 0) as qty')
+            ->orderBy('id')
+            ->leftJoin('invoice_products', 'products.id', '=', 'invoice_products.products_id')
+            ->whereNULL('deleted_at')
+            ->groupBy('products.id')
+            ->pluck('qty');
 
-        $data2 = ImportTarget::orderBy('products_id')->get()->groupBy('products_id')->map(function($row) {
-            return $row->sum('qty');
-        })->values();
+        $data2 = ImportTarget::orderBy('products_id')
+            ->get()
+            ->groupBy('products_id')
+            ->map(function($row) {
+                return $row->sum('qty');
+            })->values();
 
         $result = [
             'label' => $label,
