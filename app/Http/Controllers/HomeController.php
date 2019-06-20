@@ -51,14 +51,14 @@ class HomeController extends Controller
     {
         $label = Product::orderBy('id')->pluck('name');
 
-        $data1 = Product::selectRaw('products.id, IFNULL(SUM(qty), 0) as qty')
+        $dataRealitation = Product::selectRaw('products.id, IFNULL(SUM(qty), 0) as qty')
             ->orderBy('id')
             ->leftJoin('invoice_products', 'products.id', '=', 'invoice_products.products_id')
             ->whereNULL('deleted_at')
             ->groupBy('products.id')
             ->pluck('qty');
 
-        $data2 = ImportTarget::orderBy('products_id')
+        $dataTarget = ImportTarget::orderBy('products_id')
             ->get()
             ->groupBy('products_id')
             ->map(function($row) {
@@ -67,8 +67,8 @@ class HomeController extends Controller
 
         $result = [
             'label' => $label,
-            'data1' => $data1,
-            'data2' => $data2,
+            'dataRealitation' => $dataRealitation,
+            'dataTarget' => $dataTarget,
         ];
 
         return response()->json($result);

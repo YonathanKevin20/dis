@@ -7,7 +7,16 @@
       <div class="card">
         <div class="card-header">Dashboard</div>
         <div class="card-body">
-          <div class="row">
+{{--           <div class="row mb-3">
+            <div class="col-md-3">
+              <label>Month</label>
+              <select class="custom-select" @change="getMonth()" v-model="month">
+                <option value="all">All</option>
+                <option v-for="(value, index) in listMonths" :value="index">@{{ value }}</option>
+              </select>
+            </div>
+          </div> --}}
+          <div class="row mb-3">
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body">
@@ -40,9 +49,10 @@
           <div class="row">
             <div class="col-md-12">
               <line-chart
+                v-if="loaded"
                 :chart-id="product.id"
-                :chart-title="product.title"
-                :chart-url="product.url">
+                :chart-data="datacollection"
+                :chart-options="options">
               </line-chart>
             </div>
           </div>
@@ -57,74 +67,10 @@
 <script type="text/javascript">
 Vue.component('line-chart', {
   extends: VueChartJs.Line,
-  props: ['chartTitle', 'chartUrl'],
-  data: function () {
-    return {
-      datacollection: {
-        labels: [],
-        datasets: [
-          {
-            label: 'Realitation',
-            backgroundColor: 'transparent',
-            borderColor: '#2babab',
-            borderWidth: 2,
-            fill: false,
-            data: [],
-          },
-          {
-            label: 'Target',
-            backgroundColor: 'transparent',
-            borderColor: '#ff6384',
-            borderWidth: 2,
-            fill: false,
-            data: [],
-          }
-        ]
-      },
-      options: {
-        title: {
-          display: true,
-          text: ''
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-            }
-          }],
-          xAxes: [{
-            ticks: {
-              autoSkip: false,
-              maxRotation: 90,
-              minRotation: 30,
-            }
-          }]
-        },
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    }
+  props: ['chartData', 'chartOptions'],
+  mounted() {
+    this.renderChart(this.chartData, this.chartOptions);
   },
-  created() {
-    this.getChartData();
-  },
-  methods: {
-    getChartData() {
-      axios.get(this.chartUrl, {
-          params: {}
-        }).then((response) => {
-          this.datacollection.labels = response.data.label;
-          this.datacollection.datasets[0].data = response.data.data1;
-          this.datacollection.datasets[1].data = response.data.data2;
-          console.log(response);
-        }).catch((error) => {
-          console.log(error);
-        }).then(() => {
-          this.options.title.text = this.chartTitle;
-          this.renderChart(this.datacollection, this.options);
-        });
-    },
-  }
 });
 
 var app = new Vue({
@@ -138,16 +84,62 @@ var app = new Vue({
         existing: 0,
       },
     },
+    loaded: false,
+    datacollection: {
+      labels: [],
+      datasets: [
+        {
+          label: 'Realitation',
+          backgroundColor: 'transparent',
+          borderColor: '#2babab',
+          borderWidth: 2,
+          fill: false,
+          data: [],
+        },
+        {
+          label: 'Target',
+          backgroundColor: 'transparent',
+          borderColor: '#ff6384',
+          borderWidth: 2,
+          fill: false,
+          data: [],
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Product Chart',
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            autoSkip: false,
+            maxRotation: 90,
+            minRotation: 30,
+          }
+        }]
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    },
     product: {
       id: 'product-chart',
-      title: 'Product Chart',
       url: '/statistic/get-chart',
     },
+    listMonths: moment.months(),
+    month: 'all',
   },
-  created() {
+  mounted() {
     this.getRevenue();
     this.getItemsSold();
     this.getStore();
+    this.getChartData();
   },
   methods: {
     async getRevenue() {
@@ -180,6 +172,28 @@ var app = new Vue({
         console.error(error);
       }
     },
+    async getChartData() {
+      this.loaded = false;
+      try {
+        const response = await axios.get(this.product.url, {
+          params: {
+            // month: this.month,
+          }
+        });
+        let label = response.data.label;
+        let dataRealitation = response.data.dataRealitation;
+        let dataTarget = response.data.dataTarget;
+        this.datacollection.labels = label;
+        this.datacollection.datasets[0].data = dataRealitation;
+        this.datacollection.datasets[1].data = dataTarget;
+        this.loaded = true;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    getMonth() {
+    }
   }
 })
 </script>
