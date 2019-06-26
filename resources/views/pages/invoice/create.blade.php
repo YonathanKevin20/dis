@@ -150,28 +150,30 @@ var app = new Vue({
     listDeliveryOrders: [],
     listStores: [],
   },
-  created() {
+  mounted() {
     this.getDeliveryOrder();
     this.getStore();
   },
   methods: {
     async create() {
-      try {
-        const response = await axios.post('/invoice', {
-          stores_id: this.store.id,
-          sales_id: this.sales.id,
-          delivery_orders_id: this.delivery_order.id,
-          products: this.products,
-        });
-        this.initForm();
-        nav.getStatus();
-        Toast.fire({
-          type: 'success',
-          title: 'Created'
-        });
-        console.log(response);
-      } catch(error) {
-        console.error(error);
+      if(this.validateForm()) {
+        try {
+          const response = await axios.post('/invoice', {
+            stores_id: this.store.id,
+            sales_id: this.sales.id,
+            delivery_orders_id: this.delivery_order.id,
+            products: this.products,
+          });
+          this.initForm();
+          nav.getStatus();
+          Toast.fire({
+            type: 'success',
+            title: 'Created'
+          });
+          console.log(response);
+        } catch(error) {
+          console.error(error);
+        }
       }
     },
     async getDeliveryOrder() {
@@ -234,6 +236,16 @@ var app = new Vue({
     },
     customLabelStore({name, location}) {
       return `${name} - [${location}]`;
+    },
+    validateForm() {
+      if(!this.store) {
+        Toast.fire({
+          type: 'warning',
+          title: 'Customer must be selected'
+        });
+        return false;
+      }
+      return true;
     }
   },
   computed: {
