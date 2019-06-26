@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 
 class UserController extends Controller
 {
@@ -34,6 +36,34 @@ class UserController extends Controller
     public function changePasswordForm()
     {
         return view('pages.user.change_password');
+    }
+
+    public function changePassword(Request $req)
+    {
+        $req->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = User::findOrFail(Auth::user()->id);
+
+        if(Hash::check($req->old_password, $user->password)) {
+            $user->update([
+                'password' => Hash::make($req->new_password),
+            ]);
+            return redirect()
+                ->back()
+                ->with([
+                    'status' => 'Your password is changed',
+                ]);
+        }
+        else {
+            return redirect()
+                ->back()
+                ->with([
+                    'status' => 'Your old password is different',
+                ]);
+        }
     }
 
     public function show($id)
