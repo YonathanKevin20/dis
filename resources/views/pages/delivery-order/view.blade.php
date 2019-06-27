@@ -123,7 +123,7 @@ var app = new Vue({
     ],
     grandQty: 0,
   },
-  created() {
+  mounted() {
     this.initForm();
   },
   methods: {

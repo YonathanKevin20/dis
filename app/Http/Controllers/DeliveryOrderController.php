@@ -19,7 +19,7 @@ class DeliveryOrderController extends Controller
     {
         $model = DeliveryOrder::latest()->whereDay('created_at', date('d'))->first();
         if($model) {
-            $id = $model->id;
+            $id = substr($model->no_delivery_order, -1)+1;
         }
         else {
             $id = 1;

@@ -99,7 +99,7 @@ var app = new Vue({
     name: '',
     location: '',
   },
-  created() {
+  mounted() {
   },
   methods: {
     async create(submit) {

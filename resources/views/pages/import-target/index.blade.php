@@ -75,7 +75,7 @@ var app = new Vue({
       xlsx: '/import-target/download-template-xlsx',
     },
   },
-  created() {
+  mounted() {
   },
   methods: {
     async submitFile() {

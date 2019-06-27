@@ -1,5 +1,5 @@
 <?php
-function generateNoDeliveryOrder($id, $kode = 'DF')
+function generateNoDeliveryOrder($id, $kode = 'DO')
 {
     $date = date('ymd');
     $kode .= $date;

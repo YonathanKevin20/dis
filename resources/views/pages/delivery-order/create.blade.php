@@ -140,7 +140,7 @@ var app = new Vue({
     listVehicles: [],
     listProducts: [],
   },
-  created() {
+  mounted() {
     this.getSales();
     this.getVehicle();
     this.getProduct();
