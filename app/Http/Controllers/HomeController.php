@@ -22,14 +22,54 @@ class HomeController extends Controller
 
     public function getRevenue(Request $req)
     {
-        $model = InvoiceProduct::sum('total');
+        $model = InvoiceProduct::query();
+
+        if($req->month != 'all') {
+            $month = $req->month+1;
+            $model->whereMonth('created_at', $month);
+        }
+
+        $model = $model->sum('total');
 
         return response()->json($model); 
     }
 
+    public function getRevenueProduct(Request $req)
+    {
+        $label = Product::orderBy('id')->pluck('name');
+
+        $month = $req->month;
+
+        $model = Product::selectRaw('products.id, IFNULL(SUM(total), 0) as total')
+            ->orderBy('id')
+            ->leftJoin('invoice_products', function($join) use($month) {
+                $join->on('products.id', '=', 'invoice_products.products_id')
+                ->whereNULL('deleted_at');
+                if($month != 'all') {
+                    $join->whereMonth('created_at', $month+1);
+                }
+            })
+            ->groupBy('products.id')
+            ->pluck('total');
+
+        $result = [
+            'label' => $label,
+            'data' => $model,
+        ];
+
+        return response()->json($result);
+    }
+
     public function getItemsSold(Request $req)
     {
-        $model = InvoiceProduct::sum('qty');
+        $model = InvoiceProduct::query();
+
+        if($req->month != 'all') {
+            $month = $req->month+1;
+            $model->whereMonth('created_at', $month);
+        }
+
+        $model = $model->sum('qty');
 
         return response()->json($model); 
     }
@@ -47,19 +87,38 @@ class HomeController extends Controller
         return response()->json($result);
     }
 
+    public function getStoreLocation(Request $req)
+    {
+        $model = Store::selectRaw('location, COUNT(location) as count')->groupBy('location')->get();
+
+        return response()->json($model);
+    }
+
     public function getChart(Request $req)
     {
         $label = Product::orderBy('id')->pluck('name');
 
+        $month = $req->month;
+
         $dataRealitation = Product::selectRaw('products.id, IFNULL(SUM(qty), 0) as qty')
             ->orderBy('id')
-            ->leftJoin('invoice_products', 'products.id', '=', 'invoice_products.products_id')
-            ->whereNULL('deleted_at')
+            ->leftJoin('invoice_products', function($join) use($month) {
+                $join->on('products.id', '=', 'invoice_products.products_id')
+                ->whereNULL('deleted_at');
+                if($month != 'all') {
+                    $join->whereMonth('created_at', $month+1);
+                }
+            })
             ->groupBy('products.id')
             ->pluck('qty');
 
-        $dataTarget = ImportTarget::orderBy('products_id')
-            ->get()
+        $dataTarget = ImportTarget::orderBy('products_id');
+
+        if($month != 'all') {
+            $dataTarget = $dataTarget->where('month', 'LIKE', '%'.$month.'%');
+        }
+            
+        $dataTarget = $dataTarget->get()
             ->groupBy('products_id')
             ->map(function($row) {
                 return $row->sum('qty');

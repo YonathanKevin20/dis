@@ -29,8 +29,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'statistic'], function() {
 		Route::get('/get-revenue', 'HomeController@getRevenue');
+		Route::get('/get-revenue-product', 'HomeController@getRevenueProduct');
 		Route::get('/get-items-sold', 'HomeController@getItemsSold');
 		Route::get('/get-store', 'HomeController@getStore');
+		Route::get('/get-store-location', 'HomeController@getStoreLocation');
 		Route::get('/get-chart', 'HomeController@getChart');
 	});
 
