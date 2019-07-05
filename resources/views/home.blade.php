@@ -46,7 +46,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-md-12">
               <line-chart
                 v-if="product.loaded"
@@ -56,7 +56,7 @@
               </line-chart>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-md-12">
               <bar-chart
                 v-if="revenueProduct.loaded"
@@ -66,7 +66,7 @@
               </bar-chart>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-md-6">
               <doughnut-chart
                 v-if="storeLocation.loaded"
