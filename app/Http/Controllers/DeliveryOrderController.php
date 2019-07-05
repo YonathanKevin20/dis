@@ -17,15 +17,7 @@ class DeliveryOrderController extends Controller
 
     public function create()
     {
-        $model = DeliveryOrder::latest()->whereDay('created_at', date('d'))->first();
-        if($model) {
-            $id = substr($model->no_delivery_order, -1)+1;
-        }
-        else {
-            $id = 1;
-        }
-        $no_delivery_order = generateNoDeliveryOrder($id);
-        return view('pages.delivery-order.create', compact('no_delivery_order'));
+        return view('pages.delivery-order.create');
     }
 
     public function view($id)
@@ -80,7 +72,10 @@ class DeliveryOrderController extends Controller
             ]);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'new_no_delivery_order' => getNoDeliveryOrder(),
+        ]);
     }
 
     public function show($id)

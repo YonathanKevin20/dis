@@ -10,3 +10,15 @@ function generateNoDeliveryOrder($id, $kode = 'DO')
     $kode .= $id;
     return $kode;
 }
+
+function getNoDeliveryOrder()
+{
+    $model = App\Models\DeliveryOrder::latest()->whereDay('created_at', date('d'))->first();
+    if($model) {
+        $id = substr($model->no_delivery_order, -1)+1;
+    }
+    else {
+        $id = 1;
+    }
+    return generateNoDeliveryOrder($id);
+}

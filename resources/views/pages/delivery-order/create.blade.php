@@ -126,7 +126,7 @@
 var app = new Vue({
   el: '#app',
   data: {
-    no_delivery_order: '{{ $no_delivery_order }}',
+    no_delivery_order: '{{ getNoDeliveryOrder() }}',
     sales: '',
     vehicle: '',
     products: [
@@ -154,6 +154,7 @@ var app = new Vue({
           vehicle_id: this.vehicle.id,
           products: this.products,
         });
+        this.no_delivery_order = response.data.new_no_delivery_order;
         this.initForm();
         nav.getStatus();
         Toast.fire({
@@ -193,7 +194,6 @@ var app = new Vue({
       }
     },
     initForm() {
-      this.no_delivery_order = '';
       this.sales = '',
       this.vehicle = '',
       this.amount = '';
