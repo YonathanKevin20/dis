@@ -5,7 +5,7 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">Dashboard <br> {{ date("Y-m-d H:i:s", strtotime("-1 month")) }} <br> {{ date('Y-m-d', strtotime(date('Y-m')." -1 month")) }}</div>
+        <div class="card-header">Dashboard{{--  <br> {{ date("Y-m-d H:i:s", strtotime("-1 month")) }} <br> {{ date('Y-m-d', strtotime(date('Y-m')." -1 month")) }} --}}</div>
         <div class="card-body">
           <div class="row mb-3">
             <div class="col-md-3">
@@ -66,6 +66,24 @@
               </bar-chart>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6">
+              <doughnut-chart
+                v-if="storeLocation.loaded"
+                :chart-id="storeLocation.id"
+                :chart-data="chartStoreLocation.datacollection"
+                :chart-options="chartStoreLocation.options">
+              </doughnut-chart>
+            </div>
+            <div class="col-md-6">
+              <bar-chart
+                v-if="itemsSoldStore.loaded"
+                :chart-id="itemsSoldStore.id"
+                :chart-data="chartItemsSoldStore.datacollection"
+                :chart-options="chartItemsSoldStore.options">
+              </bar-chart>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -91,6 +109,20 @@ Vue.component('line-chart', {
 
 Vue.component('bar-chart', {
   extends: VueChartJs.Bar,
+  mixins: [VueChartJs.mixins.reactiveProp],
+  props: ['chartData', 'chartOptions'],
+  mounted() {
+    this.renderChart(this.chartData, this.chartOptions);
+  },
+  watch: {
+    chartData() {
+      this.$data._chart.update()
+    }
+  },
+});
+
+Vue.component('doughnut-chart', {
+  extends: VueChartJs.Doughnut,
   mixins: [VueChartJs.mixins.reactiveProp],
   props: ['chartData', 'chartOptions'],
   mounted() {
@@ -214,6 +246,67 @@ var app = new Vue({
         maintainAspectRatio: false
       },
     },
+    chartStoreLocation: {
+      datacollection: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Location',
+            backgroundColor: [
+              '#ff6384',
+              '#ffcd56',
+              '#4bc0c0',
+              '#36a2eb',
+            ],
+            data: [],
+          }
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Customer/Store Location',
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      },
+    },
+    chartItemsSoldStore: {
+      datacollection: {
+        labels: [],
+        datasets: [
+          {
+            label: 'QTY',
+            backgroundColor: '#c9cbcf',
+            borderColor: '#c9cbcf',
+            borderWidth: 1,
+            data: [],
+          }
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Items Sold Chart',
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              autoSkip: false,
+              maxRotation: 90,
+              minRotation: 30,
+            }
+          }]
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      },
+    },
     product: {
       id: 'product-chart',
       url: '/statistic/get-chart',
@@ -224,6 +317,16 @@ var app = new Vue({
       url: '/statistic/get-revenue-product',
       loaded: false,
     },
+    storeLocation: {
+      id: 'store-location-chart',
+      url: '/statistic/get-store-location',
+      loaded: false,
+    },
+    itemsSoldStore: {
+      id: 'items-sold-store-chart',
+      url: '/statistic/get-items-sold-store',
+      loaded: false,
+    },
     listMonths: moment.months(),
     month: {{ date('m')-1 }},
   },
@@ -232,7 +335,9 @@ var app = new Vue({
     this.getItemsSold();
     this.getStore();
     this.getChartData();
-    this.getRevenueProduct();
+    this.getChartRevenueProduct();
+    this.getChartStoreLocation();
+    this.getChartItemsSoldStore();
   },
   methods: {
     async getRevenue() {
@@ -293,7 +398,7 @@ var app = new Vue({
         console.error(error);
       }
     },
-    async getRevenueProduct() {
+    async getChartRevenueProduct() {
       this.revenueProduct.loaded = false;
       try {
         const response = await axios.get(this.revenueProduct.url, {
@@ -311,11 +416,45 @@ var app = new Vue({
         console.error(error);
       }
     },
+    async getChartStoreLocation() {
+      this.storeLocation.loaded = false;
+      try {
+        const response = await axios.get(this.storeLocation.url, {
+          params: {
+          }
+        });
+        let label = response.data.label;
+        let data = response.data.data;
+        this.chartStoreLocation.datacollection.labels = label;
+        this.chartStoreLocation.datacollection.datasets[0].data = data;
+        this.storeLocation.loaded = true;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getChartItemsSoldStore() {
+      this.itemsSoldStore.loaded = false;
+      try {
+        const response = await axios.get(this.itemsSoldStore.url, {
+          params: {
+          }
+        });
+        let label = response.data.label;
+        let data = response.data.data;
+        this.chartItemsSoldStore.datacollection.labels = label;
+        this.chartItemsSoldStore.datacollection.datasets[0].data = data;
+        this.itemsSoldStore.loaded = true;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     getMonth() {
       this.getRevenue();
       this.getItemsSold();
       this.getChartData();
-      this.getRevenueProduct();
+      this.getChartRevenueProduct();
     }
   }
 })

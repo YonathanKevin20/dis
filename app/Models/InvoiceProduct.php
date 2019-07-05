@@ -17,4 +17,9 @@ class InvoiceProduct extends Model
     {
         return $this->belongsTo('App\Models\Product', 'products_id', 'id');
     }
+
+    public function invoice()
+    {
+        return $this->belongsTo('App\Models\Invoice', 'invoices_id', 'id');
+    }
 }

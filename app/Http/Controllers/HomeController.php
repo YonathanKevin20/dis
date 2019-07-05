@@ -41,10 +41,11 @@ class HomeController extends Controller
         $month = $req->month;
 
         $model = Product::selectRaw('products.id, IFNULL(SUM(total), 0) as total')
-            ->orderBy('id')
+            ->orderBy('products.id')
             ->leftJoin('invoice_products', function($join) use($month) {
                 $join->on('products.id', '=', 'invoice_products.products_id')
                 ->whereNULL('deleted_at');
+
                 if($month != 'all') {
                     $join->whereMonth('created_at', $month+1);
                 }
@@ -74,6 +75,34 @@ class HomeController extends Controller
         return response()->json($model); 
     }
 
+    public function getItemsSoldStore(Request $req)
+    {
+        $label = Store::orderBy('id')
+            ->groupBy('location')
+            ->pluck('location');
+
+        $model = Store::selectRaw('stores_id, IFNULL(SUM(qty), 0) as qty')
+            ->orderBy('stores.id')
+            ->leftJoin('invoices', function($join) {
+                $join->on('invoices.stores_id', '=', 'stores.id')
+                ->whereNULL('invoices.deleted_at')
+                ->leftJoin('invoice_products', function($join) {
+                    $join->on('invoice_products.invoices_id', '=', 'invoices.id')
+                    ->whereNULL('invoice_products.deleted_at');
+                });
+            })
+            ->whereNULL('stores.deleted_at')
+            ->groupBy('stores_id')
+            ->pluck('qty');
+
+        $result = [
+            'label' => $label,
+            'data' => $model,
+        ];
+
+        return response()->json($result);
+    }
+
     public function getStore(Request $req)
     {
         $new_store = Store::whereMonth('created_at', date('m'))->count('id');
@@ -89,9 +118,21 @@ class HomeController extends Controller
 
     public function getStoreLocation(Request $req)
     {
-        $model = Store::selectRaw('location, COUNT(location) as count')->groupBy('location')->get();
+        $label = Store::orderBy('id')
+            ->groupBy('location')
+            ->pluck('location');
 
-        return response()->json($model);
+        $model = Store::selectRaw('COUNT(location) as count')
+            ->orderBy('id')
+            ->groupBy('location')
+            ->pluck('count');
+
+        $result = [
+            'label' => $label,
+            'data' => $model,
+        ];
+
+        return response()->json($result);
     }
 
     public function getChart(Request $req)
