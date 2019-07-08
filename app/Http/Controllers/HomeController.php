@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ImportTarget;
 use App\Models\InvoiceProduct;
+use App\User;
 use App\Models\Store;
 use App\Models\Product;
+use DateTime;
 
 class HomeController extends Controller
 {
@@ -130,6 +132,73 @@ class HomeController extends Controller
         $result = [
             'label' => $label,
             'data' => $model,
+        ];
+
+        return response()->json($result);
+    }
+
+    public function getAvgTimeSales(Request $req)
+    {
+        $label = User::whereRole(2)
+            ->orderBy('id')
+            ->pluck('name');
+
+        $model = User::selectRaw("
+            users.id,
+            users.name,
+            delivery_orders.id as do_id,
+            no_delivery_order,
+            DATEDIFF(invoice_products.updated_at, delivery_orders.created_at) as 'diff'")
+            ->leftJoin('delivery_orders', function($join) {
+                $join->on('delivery_orders.sales_id', '=', 'users.id')
+                ->whereNULL('delivery_orders.deleted_at')
+                ->whereStatus('2')
+                ->leftJoin('invoices', function($join) {
+                    $join->on('invoices.delivery_orders_id', '=', 'delivery_orders.id')
+                    ->whereNULL('invoices.deleted_at')
+                    ->latest('invoices.updated_at')
+                    ->leftJoin('invoice_products', function($join) {
+                        $join->on('invoice_products.invoices_id', '=', 'invoices.id')
+                        ->whereNULL('invoice_products.deleted_at')
+                        ->latest('invoice_products.updated_at');
+                    });
+                });
+            })
+            ->whereRole(2);
+
+        if($req->sales_id) {
+            $sales_id = $req->sales_id;
+            $model->where('users.id', $sales_id);
+        }
+
+        $model = $model->groupBy([
+            'users.id',
+            'users.name',
+            'do_id',
+            'no_delivery_order',
+            'diff',
+        ])->get();
+
+        $data = array();
+        $data_id = array();
+        foreach($model as $value) {
+            $id = $value->id ?? 0;
+            if(!array_key_exists($id, $data)) {
+                $data[$id] = $value->diff ?? 0;
+                $data_id[$id] = $value->id;
+            }
+            else {
+                $data[$id] = $data[$id] + $value->diff ?? 0;
+            }
+        }
+        $data = array_values($data);
+        $data_id = array_values($data_id);
+
+        $result = [
+            'label' => $label,
+            'data' => $data,
+            'id' => $data_id,
+            'model' => $model,
         ];
 
         return response()->json($result);

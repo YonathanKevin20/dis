@@ -66,6 +66,11 @@ class UserController extends Controller
         }
     }
 
+    public function avgTimeSales($sales_id)
+    {
+        return view('pages.user.view_avg_time_sales', compact('sales_id'));
+    }
+
     public function show($id)
     {
         //

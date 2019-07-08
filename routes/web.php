@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('/get-items-sold-store', 'HomeController@getItemsSoldStore');
 		Route::get('/get-store', 'HomeController@getStore');
 		Route::get('/get-store-location', 'HomeController@getStoreLocation');
+		Route::get('/get-avg-time-sales', 'HomeController@getAvgTimeSales');
 		Route::get('/get-chart', 'HomeController@getChart');
 	});
 
@@ -59,6 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('/get-sales', 'UserController@getSales');
 		Route::get('/change-password', 'UserController@changePasswordForm')->name('user.changePasswordForm');
 		Route::post('/change-password', 'UserController@changePassword');
+		Route::get('/view-avg-time/{sales_id}', 'UserController@avgTimeSales');
 	});
 
 	Route::group(['prefix' => 'delivery-order'], function() {

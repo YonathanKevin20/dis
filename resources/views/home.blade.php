@@ -84,6 +84,35 @@
               </bar-chart>
             </div>
           </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <bar-chart
+                v-if="avgTimeSales.loaded"
+                :chart-id="avgTimeSales.id"
+                :chart-data="chartAvgTimeSales.datacollection"
+                :chart-options="chartAvgTimeSales.options">
+              </bar-chart>
+            </div>
+            <div class="col-md-6">
+              <table class="table table-hover">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sales</th>
+                    <th scope="col">Days(s)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(person, index) in sales">
+                    <th scope="row">@{{ index+1 }}</th>
+                    <td><a :href="url_avg_time+person.id" target="_blank">@{{ person.name }}</a></td>
+                    <td>@{{ person.day }}</td>
+                  </tr>
+                  <tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -307,6 +336,42 @@ var app = new Vue({
         maintainAspectRatio: false
       },
     },
+    chartAvgTimeSales: {
+      datacollection: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Day(s)',
+            backgroundColor: '#4bc0c0',
+            borderColor: '#4bc0c0',
+            borderWidth: 1,
+            data: [],
+          }
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Average Time Chart',
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              autoSkip: false,
+              maxRotation: 90,
+              minRotation: 30,
+            }
+          }]
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      },
+    },
     product: {
       id: 'product-chart',
       url: '/statistic/get-chart',
@@ -327,6 +392,13 @@ var app = new Vue({
       url: '/statistic/get-items-sold-store',
       loaded: false,
     },
+    avgTimeSales: {
+      id: 'avg-time-store-chart',
+      url: '/statistic/get-avg-time-sales',
+      loaded: false,
+    },
+    sales: [],
+    url_avg_time: '/user/view-avg-time/',
     listMonths: moment.months(),
     month: {{ date('m')-1 }},
   },
@@ -338,6 +410,7 @@ var app = new Vue({
     this.getChartRevenueProduct();
     this.getChartStoreLocation();
     this.getChartItemsSoldStore();
+    this.getChartAvgTimeSales();
   },
   methods: {
     async getRevenue() {
@@ -445,6 +518,32 @@ var app = new Vue({
         this.chartItemsSoldStore.datacollection.labels = label;
         this.chartItemsSoldStore.datacollection.datasets[0].data = data;
         this.itemsSoldStore.loaded = true;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getChartAvgTimeSales() {
+      this.avgTimeSales.loaded = false;
+      try {
+        const response = await axios.get(this.avgTimeSales.url, {
+          params: {
+          }
+        });
+        let id = response.data.id;
+        let label = response.data.label;
+        let data = response.data.data;
+        this.chartAvgTimeSales.datacollection.labels = label;
+        this.chartAvgTimeSales.datacollection.datasets[0].data = data;
+        this.avgTimeSales.loaded = true;
+        for(let i = 0; i < label.length; i++) {
+          this.sales.push({
+            id: id[i],
+            name: label[i],
+            day: data[i],
+          });
+        }
+        console.log(this.sales);
         console.log(response);
       } catch (error) {
         console.error(error);
