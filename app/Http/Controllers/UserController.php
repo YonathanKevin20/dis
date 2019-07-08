@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\User;
+use App\Models\DeliveryOrder;
 use Auth;
 
 class UserController extends Controller
@@ -69,6 +70,17 @@ class UserController extends Controller
     public function avgTimeSales($sales_id)
     {
         return view('pages.user.view_avg_time_sales', compact('sales_id'));
+    }
+
+    public function showAvgTimeSales(Request $req)
+    {
+        $deliver_orders_id = $req->deliver_orders_id;
+
+        $model = DeliveryOrder::with(['sales', 'invoice.invoiceProduct.product', 'invoice.store'])
+            ->whereIn('id', $deliver_orders_id)
+            ->get();
+
+        return response()->json($model);
     }
 
     public function show($id)

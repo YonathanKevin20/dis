@@ -24,4 +24,9 @@ class DeliveryOrder extends Model
     {
         return $this->belongsTo('App\Models\Vehicle', 'vehicles_id', 'id');
     }
+
+    public function invoice()
+    {
+        return $this->hasMany('App\Models\Invoice', 'delivery_orders_id', 'id');
+    }
 }

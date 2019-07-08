@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('/change-password', 'UserController@changePasswordForm')->name('user.changePasswordForm');
 		Route::post('/change-password', 'UserController@changePassword');
 		Route::get('/view-avg-time/{sales_id}', 'UserController@avgTimeSales');
+		Route::get('/detail-avg-time', 'UserController@showAvgTimeSales');
 	});
 
 	Route::group(['prefix' => 'delivery-order'], function() {

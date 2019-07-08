@@ -4,96 +4,78 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">Average Time</div>
+      <div class="card" v-if="loaded">
+        <div class="card-header">Average Time - <b>@{{ details[0].sales.name }}</b></div>
 
         <div class="card-body">
-          <div class="form-group row">
+          <div class="form-group row" v-for="detail in details">
             <div class="col-md-12">
-{{--               <table class="table table-bordered" id="stores-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>No. Delivery Order</th>
-                    <th>Location</th>
-                    <th width="15%"></th>
-                  </tr>
-                </thead>
-              </table> --}}
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group text-right">
+                    <label class="font-weight-bold">Tgl. Dokumen</label><br>
+                    <span>@{{ detail.created_at | humanDate }}</span>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="font-weight-bold">No. Dokumen</label><br>
+                    <span>@{{ detail.no_delivery_order }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row" v-for="invoice in detail.invoice">
+                <div class="col-md-3">
+                  <div class="form-group text-right">
+                    <label class="font-weight-bold">Tgl. Invoice</label><br>
+                    <span>@{{ invoice.created_at | humanDate }}</span><br><br>
+                    <label class="font-weight-bold">Customer</label><br>
+                    <span>@{{ invoice.store.name }} - [@{{ invoice.store.location }}]</span>
+                  </div>
+                </div>
+                <div class="col-md-9">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th width="25%">Code</th>
+                        <th width="35%">Product Name</th>
+                        <th width="15%">QTY</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(row, index) in invoice.invoice_product">
+                        <td>@{{ index+1 }}</td>
+                        <td>@{{ row.product.code }}</td>
+                        <td>@{{ row.product.name }}</td>
+                        <td>@{{ row.qty}}</td>
+                        <td>@{{ row.product.price | currency }}</td>
+                        <td>@{{ row.total | currency }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <hr style="border-top: 2.5px solid rgb(0,0,0,.75);">
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
-
-@component('components.modal_store_create', ['title' => 'Create Customer'])
-@endcomponent
-@component('components.modal_store_edit', ['title' => 'Edit Customer'])
-@endcomponent
-
 @endsection
 
 @push('scripts')
 <script type="text/javascript">
-// $(document).ready(function() {
-//   var tables = $('#stores-table').DataTable({
-//     processing: true,
-//     serverSide: true,
-//     ajax: {
-//       url: '/store/get-datatables',
-//     },
-//     order: [[ 1, 'asc' ]],
-//     columns: [
-//       { data: null, name: null, searchable: false, orderable: false },
-//       { data: 'name', name: 'name' },
-//       { data: 'location', name: 'location' },
-//       /* ACTION */ {
-//         render: function (data, type, row) {
-//           return "<button id='modal-edit' class='btn btn-sm btn-primary' data-id='"+row.id+"' data-name='"+row.name+"' data-location='"+row.location+"'>Edit</button>&nbsp;<button onclick='checkDelete("+row.id+")' class='btn btn-sm btn-danger'>Delete</button>";
-//         }, orderable: false, searchable: false
-//       },
-//     ]
-//   });
-//   tables.on('draw.dt', function () {
-//       var info = tables.page.info();
-//       tables.column(0, { search: 'applied', order: 'applied', page: 'applied' }).nodes().each(function (cell, i) {
-//           cell.innerHTML = i + 1 + info.start;
-//       });
-//   });
-// });
-
-$(document).on('click', '#modal-edit',function() {
-  app.id = ($(this).data('id'));
-  app.name = ($(this).data('name'));
-  app.location = ($(this).data('location'));
-  $("#modal-store-edit").modal('show');
-});
-
-function checkDelete(id) {
-  Swal.fire({
-    title: 'Are you sure?',
-    type: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes'
-  }).then((result) => {
-    if(result.value) {
-      app.delete(id);
-    }
-  })
-}
-
 var app = new Vue({
   el: '#app',
   data: {
-    sales_id: {{ $sales_id }},
-
-    name: '',
-    location: '',
+    deliver_orders_id: '',
+    details: '',
+    loaded: false,
   },
   mounted() {
     this.getAvgTime();
@@ -101,75 +83,34 @@ var app = new Vue({
   methods: {
     async getAvgTime() {
       try {
-        const response = await axios.get('/statistic/get-avg-time-sales/', {
+        const response = await axios.get('/statistic/get-avg-time-sales', {
           params: {
-            sales_id: this.sales_id,
+            sales_id: {{ $sales_id }},
           }
         });
-        let data = response.data.model;
-        console.log(data);
+        this.deliver_orders_id = response.data;
+        if(response.data[0]) {
+          this.getDetail();
+        }
+        console.log(response);
       } catch (error) {
         console.error(error);
       }
     },
-    async create(submit) {
-      if(submit) {
-        try {
-          const response = await axios.post('/store', {
-            name: this.name,
-            location: this.location,
-          });
-          this.initForm();
-          $("#modal-store-create").modal('hide');
-          $('#stores-table').DataTable().ajax.reload();
-          Toast.fire({
-            type: 'success',
-            title: 'Created'
-          });
-          console.log(response);
-        } catch(error) {
-          console.error(error);
-        }
-      }
-      else {
-        this.initForm();
-        $("#modal-store-create").modal('show');
-      }
-    },
-    async update(id) {
+    async getDetail() {
+      this.loaded = false;
       try {
-        const response = await axios.patch('/store/'+app.id, {
-          name: this.name,
-          location: this.location,
+        const response = await axios.get('/user/detail-avg-time', {
+          params: {
+            deliver_orders_id: this.deliver_orders_id,
+          }
         });
-        $("#modal-store-edit").modal('hide');
-        $('#stores-table').DataTable().ajax.reload();
-        Toast.fire({
-          type: 'success',
-          title: 'Updated'
-        });
+        this.details = response.data;
+        this.loaded = true;
         console.log(response);
-      } catch(error) {
+      } catch (error) {
         console.error(error);
       }
-    },
-    async delete(id) {
-      try {
-        const response = await axios.delete('/store/'+id);
-        $('#stores-table').DataTable().ajax.reload();
-        Toast.fire({
-          type: 'success',
-          title: 'Deleted'
-        });
-        console.log(response);
-      } catch(error) {
-        console.error(error);
-      }
-    },
-    initForm() {
-      this.id = '';
-      this.name = '';
-      this.location = '';
     },
   }
 })

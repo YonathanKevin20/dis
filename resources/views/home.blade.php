@@ -543,7 +543,6 @@ var app = new Vue({
             day: data[i],
           });
         }
-        console.log(this.sales);
         console.log(response);
       } catch (error) {
         console.error(error);

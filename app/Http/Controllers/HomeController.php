@@ -164,20 +164,24 @@ class HomeController extends Controller
                     });
                 });
             })
-            ->whereRole(2);
+            ->whereRole(2)
+            ->groupBy([
+                'users.id',
+                'users.name',
+                'do_id',
+                'no_delivery_order',
+                'diff',
+            ]);
 
         if($req->sales_id) {
             $sales_id = $req->sales_id;
-            $model->where('users.id', $sales_id);
-        }
+            $model = $model->where('users.id', $sales_id)->pluck('do_id');
 
-        $model = $model->groupBy([
-            'users.id',
-            'users.name',
-            'do_id',
-            'no_delivery_order',
-            'diff',
-        ])->get();
+            return response()->json($model);
+        }
+        else {
+            $model = $model->get();
+        }
 
         $data = array();
         $data_id = array();
