@@ -49,7 +49,7 @@ $(document).ready(function() {
     processing: true,
     serverSide: true,
     ajax: '/import-target/get-datatables',
-    order: [[ 1, 'asc' ]],
+    order: [[ 2, 'desc' ]],
     columns: [
       { data: null, name: null, searchable: false, orderable: false },
       { data: 'year', name: 'year' },
@@ -79,6 +79,7 @@ var app = new Vue({
   },
   methods: {
     async submitFile() {
+      this.disabled = true;
       let formData = new FormData();
       formData.append('file', this.file);
       const { data } = await axios.post('/import-target/import', formData, {
@@ -92,6 +93,7 @@ var app = new Vue({
           title: 'Imported'
         });
         $('#import-targets-table').DataTable().ajax.reload();
+        this.disabled = false;
       }
       else {
         alert('error');

@@ -173,9 +173,6 @@
     </script>
     <!-- Vue-Multiselect -->
     <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
-    <!-- Vue-ChartJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
     <!-- Vue Currency Filter Dependency -->
     <script src="https://unpkg.com/vue-currency-filter@3.2.3/dist/vue-currency-filter.iife.js"></script>
     <script type="text/javascript">
